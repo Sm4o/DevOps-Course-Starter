@@ -11,14 +11,22 @@
     <div class="col-md-12">
       <h2>Items</h2>
       <form action="/add_item" method="post">
-        <input type="text" name="title" id="title" required>
-        <input type="submit" value="Add New">
+        <input class="form-control form-control-lg" type="text" name="title" id="title" placeholder="What do you want to do?" required>
+        <label for="title"><em>Press <code>Return</code> to save</em></label>
       </form>
       <ul class="list-group mb-4">
+        {% if not items_list %}
+          <b>No items to do yet</b>
+        {% endif %}
         {% for item in items_list %}
-        <li>
-          <b>{{item['title']}}</b> [{{ item['status'] }}]
-        </li>
+          <li>
+            {% if item.status == 'Completed' %}
+              <del><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.title }}</a></del>
+            {% else %}
+              <b><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.title }}</a></b> 
+            {% endif %}
+            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm float-right">Delete</a>
+          </li>
         {% endfor %}
       </ul>
     </div>
