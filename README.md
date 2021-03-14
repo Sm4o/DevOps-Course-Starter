@@ -1,5 +1,18 @@
 # DevOps Apprenticeship: Project Exercise
 
+## Setup
+To store ToDo items, the project uses as Trello's REST API. To set it up:
+
+1. Create a [Trello account](https://trello.com/signup)
+
+2. Generate an API Key and Token [here](https://trello.com/app-key)
+
+3. Save credentials to `.env` file as shown in `.env.template`:
+    ```
+    APP_KEY=...
+    TOKEN=...
+    ```
+
 ## System Requirements
 
 The project uses poetry for Python to create an isolated environment and manage package dependencies. To prepare your system, ensure you have an official distribution of Python version 3.7+ and install poetry using one of the following commands (as instructed by the [poetry documentation](https://python-poetry.org/docs/#system-requirements)):
