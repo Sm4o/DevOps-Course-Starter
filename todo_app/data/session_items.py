@@ -1,3 +1,5 @@
+from typing import List
+
 from flask import session
 
 _DEFAULT_ITEMS = [
@@ -6,17 +8,19 @@ _DEFAULT_ITEMS = [
 ]
 
 
-def get_items():
+def get_items() -> List[dict]:
     """
     Fetches all saved items from the session.
 
     Returns:
         list: The list of saved items.
     """
-    return session.get('items', _DEFAULT_ITEMS)
+    items = session.get('items', _DEFAULT_ITEMS)
+    sorted_items = sorted(items, key=lambda item: item['status'], reverse=True) 
+    return sorted_items
 
 
-def get_item(id):
+def get_item(id: int) -> dict:
     """
     Fetches the saved item with the specified ID.
 
@@ -30,7 +34,7 @@ def get_item(id):
     return next((item for item in items if item['id'] == int(id)), None)
 
 
-def add_item(title):
+def add_item(title: str) -> None:
     """
     Adds a new item with the specified title to the session.
 
@@ -43,18 +47,20 @@ def add_item(title):
     items = get_items()
 
     # Determine the ID for the item based on that of the previously added item
-    id = items[-1]['id'] + 1 if items else 0
+    try:
+        id = max([item['id'] for item in items]) + 1
+    except ValueError:
+        # No items hence start from ID 1
+        id = 1
 
     item = { 'id': id, 'title': title, 'status': 'Not Started' }
 
     # Add the item to the list
-    items.append(item)
+    items.insert(0, item)
     session['items'] = items
 
-    return item
 
-
-def save_item(item):
+def save_item(item: dict) -> None:
     """
     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
 
@@ -66,4 +72,20 @@ def save_item(item):
 
     session['items'] = updated_items
 
-    return item
+
+def delete_item(item_id: int) -> None:
+    """
+    Deletes an item from the session. 
+    If the item doesn't exist it will skip.
+
+    Args:
+        item_id: The ID of the item to delete. 
+
+    Returns:
+        item_id: The ID of the item deleted.
+    """
+    existing_items = get_items()
+
+    updated_items = list(filter(None, [existing_items if existing_items['id'] != item_id else None for existing_items in existing_items]))
+
+    session['items'] = updated_items
