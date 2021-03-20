@@ -20,10 +20,10 @@
         {% endif %}
         {% for item in items_list %}
           <li>
-            {% if item.status == 'Completed' %}
-              <del><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.title }}</a></del>
+            {% if item.status == 'Done' %}
+              <del><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.name }}</a></del>
             {% else %}
-              <b><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.title }}</a></b> 
+              <b><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.name }}</a></b> 
             {% endif %}
             <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm float-right">Delete</a>
           </li>

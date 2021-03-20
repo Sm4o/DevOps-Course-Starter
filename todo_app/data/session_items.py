@@ -2,22 +2,31 @@ from typing import List
 
 from flask import session
 
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
+from todo_app.trello import (
+    get_board_lists, 
+    get_board_cards,
+    create_card,
+    delete_card,
+)
 
 
 def get_items() -> List[dict]:
     """
-    Fetches all saved items from the session.
+    Fetches all saved items from the Trello. 
 
     Returns:
         list: The list of saved items.
     """
-    items = session.get('items', _DEFAULT_ITEMS)
-    sorted_items = sorted(items, key=lambda item: item['status'], reverse=True) 
-    return sorted_items
+    todo_lists = get_board_lists()
+    cards = get_board_cards()
+    for card in cards:
+        for todo_list in todo_lists:
+            if card['idList'] == todo_list['id']:
+                card['status'] = todo_list['name']
+
+    cards = [card for card in cards if card['idList']]
+    sorted_cards = sorted(cards, key=lambda card: card['status'], reverse=True) 
+    return sorted_cards
 
 
 def get_item(id: int) -> dict:
@@ -36,28 +45,12 @@ def get_item(id: int) -> dict:
 
 def add_item(title: str) -> None:
     """
-    Adds a new item with the specified title to the session.
+    Adds a new item with the specified title to the Trello.
 
     Args:
         title: The title of the item.
-
-    Returns:
-        item: The saved item.
     """
-    items = get_items()
-
-    # Determine the ID for the item based on that of the previously added item
-    try:
-        id = max([item['id'] for item in items]) + 1
-    except ValueError:
-        # No items hence start from ID 1
-        id = 1
-
-    item = { 'id': id, 'title': title, 'status': 'Not Started' }
-
-    # Add the item to the list
-    items.insert(0, item)
-    session['items'] = items
+    create_card(title)
 
 
 def save_item(item: dict) -> None:
@@ -73,9 +66,9 @@ def save_item(item: dict) -> None:
     session['items'] = updated_items
 
 
-def delete_item(item_id: int) -> None:
+def delete_item(item_id: str) -> None:
     """
-    Deletes an item from the session. 
+    Deletes an item from Trello. 
     If the item doesn't exist it will skip.
 
     Args:
@@ -84,8 +77,4 @@ def delete_item(item_id: int) -> None:
     Returns:
         item_id: The ID of the item deleted.
     """
-    existing_items = get_items()
-
-    updated_items = list(filter(None, [existing_items if existing_items['id'] != item_id else None for existing_items in existing_items]))
-
-    session['items'] = updated_items
+    delete_card(item_id)

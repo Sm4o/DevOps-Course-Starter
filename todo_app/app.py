@@ -40,9 +40,9 @@ def complete_item(item_id):
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<int:item_id>')
+@app.route('/delete/<item_id>')
 def remove_item(item_id):
-    item = delete_item(item_id)
+    delete_item(item_id)
     return redirect(url_for('index'))
 
 
