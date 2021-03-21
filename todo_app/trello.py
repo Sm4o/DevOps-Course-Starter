@@ -62,5 +62,17 @@ def mark_card_as_done(card_id):
         'id': card_id,
         'idList': done_list['id'],
     }
-    resp = requests.put(BASE_URL + endpoint, params=params)
-    print(resp.json())
+    requests.put(BASE_URL + endpoint, params=params)
+
+
+def mark_card_as_todo(card_id):
+    endpoint = f"cards/{card_id}"
+    lists = get_board_lists()
+    todo_list = next((list for list in lists if list['name'] == 'To Do'), None)
+    params = {
+        'key': os.getenv('APP_KEY'),
+        'token': os.getenv('TOKEN'),
+        'id': card_id,
+        'idList': todo_list['id'],
+    }
+    requests.put(BASE_URL + endpoint, params=params)

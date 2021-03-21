@@ -8,27 +8,33 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12"> 
       <h2>Items</h2>
-      <form action="/add_item" method="post">
+      <form action="{{ url_for('add_todo_item') }}" method="post">
         <input class="form-control form-control-lg" type="text" name="title" id="title" placeholder="What do you want to do?" required>
         <label for="title"><em>Press <code>Return</code> to save</em></label>
       </form>
-      <ul class="list-group mb-4">
-        {% if not items_list %}
-          <b>No items to do yet</b>
-        {% endif %}
-        {% for item in items_list %}
-          <li>
+      {% if not items_list %}
+        <b>No items to do yet</b>
+      {% endif %}
+      {% for item in items_list %}
+        <div class="row">
+          <div class="col-sm">
             {% if item.status == 'Done' %}
               <del><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.name }}</a></del>
             {% else %}
               <b><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.name }}</a></b> 
             {% endif %}
-            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm float-right">Delete</a>
-          </li>
-        {% endfor %}
-      </ul>
+            {% if item.status == 'Done' %}
+              <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
+            {% else %}
+              <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
+            {% endif %}
+            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
     </div>
   </div>
 {% endblock %}

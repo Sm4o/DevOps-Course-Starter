@@ -7,6 +7,8 @@ from todo_app.trello import (
     get_board_cards,
     create_card,
     delete_card,
+    mark_card_as_done,
+    mark_card_as_todo,
 )
 
 
@@ -53,19 +55,6 @@ def add_item(title: str) -> None:
     create_card(title)
 
 
-def save_item(item: dict) -> None:
-    """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
-
-    Args:
-        item: The item to save.
-    """
-    existing_items = get_items()
-    updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
-
-    session['items'] = updated_items
-
-
 def delete_item(item_id: str) -> None:
     """
     Deletes an item from Trello. 
@@ -78,3 +67,11 @@ def delete_item(item_id: str) -> None:
         item_id: The ID of the item deleted.
     """
     delete_card(item_id)
+
+
+def update_item_complete(item_id: str) -> None:
+    mark_card_as_done(item_id)
+
+
+def update_item_uncomplete(item_id: str) -> None:
+    mark_card_as_todo(item_id)

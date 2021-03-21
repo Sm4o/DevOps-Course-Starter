@@ -10,9 +10,9 @@ from todo_app.flask_config import Config
 from todo_app.data.session_items import (
     get_items, 
     add_item,
-    get_item,
-    save_item,
     delete_item,
+    update_item_complete,
+    update_item_uncomplete,
 )
 
 app = Flask(__name__)
@@ -34,9 +34,13 @@ def add_todo_item():
 
 @app.route('/complete/<item_id>')
 def complete_item(item_id):
-    item = get_item(item_id)
-    item['status'] = 'Completed'
-    save_item(item)
+    update_item_complete(item_id)
+    return redirect(url_for('index'))
+
+
+@app.route('/uncomplete/<item_id>')
+def uncomplete_item(item_id):
+    update_item_uncomplete(item_id)
     return redirect(url_for('index'))
 
 
