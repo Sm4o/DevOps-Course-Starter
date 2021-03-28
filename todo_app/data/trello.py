@@ -7,9 +7,27 @@ from todo_app.data.item import Item
 
 
 class CardStatus(Enum):
-    # TODO: What if we rename on Trello the board? hmm. Use auto()?
     DONE = 'Done'
     TODO = 'To Do'
+
+    @staticmethod
+    def set_card_status(cards: List[dict], board_lists: List[dict]) -> List[dict]:
+        """ Adds card status to Trello cards response """
+        for card in cards:
+            for todo_list in board_lists:
+                if card['idList'] == todo_list['id']:
+                    card['status'] = todo_list['name']
+        return cards
+
+    @classmethod
+    def get_status(cls, list_id: str, board_lists: List[dict]) -> Enum:
+        status = next((list['name'] for list in board_lists if list['id'] == list_id), None)
+        if status == cls.DONE.value:
+            return cls.DONE
+        elif status == cls.TODO.value:
+            return cls.TODO
+        else:
+            raise ValueError('Unknown status')
 
 
 class Trello:
@@ -28,24 +46,24 @@ class Trello:
         Returns:
             list: The list of saved items.
         """
-        cards = self.get_board_cards()
-        for card in cards:
-            for todo_list in self.board_lists:
-                if card['idList'] == todo_list['id']:
-                    card['status'] = todo_list['name']
-
-        cards = [card for card in cards if card['idList']]
-        sorted_cards = sorted(cards, key=lambda card: card['status'], reverse=True) 
-        return sorted_cards
-
-    def get_board_cards(self) -> List[dict]:
         endpoint = f"boards/{self.board_id}/cards"
         params = {
             'key': self.app_key,
             'token': self.token,
         }
-        resp = requests.get(self.BASE_URL + endpoint, params=params)
-        return resp.json()
+
+        cards = []
+        json_response = requests.get(self.BASE_URL + endpoint, params=params).json()
+        for card in json_response:
+            id = card['id']
+            title = card['name']
+            description = card['desc']
+            list_id = card['idList'] 
+            status = CardStatus.get_status(list_id, self.board_lists)
+            cards.append(Item(id, title, description, status))
+
+        sorted_cards = sorted(cards, key=lambda card: card.status.value, reverse=True) 
+        return sorted_cards
 
     def get_board_lists(self) -> List[dict]:
         endpoint = f"boards/{self.board_id}/lists"
@@ -56,7 +74,7 @@ class Trello:
         resp = requests.get(self.BASE_URL + endpoint, params=params)
         return resp.json()
 
-    def add_item(self, name: str) -> None:
+    def add_item(self, name: str, description: str) -> None:
         """
         Add a new item with the specified title to the Trello.
 
@@ -69,6 +87,7 @@ class Trello:
             'key': self.app_key,
             'token': self.token,
             'name': name,
+            'desc': description,
             'idList': todo_list['id'],
         }
         resp = requests.post(self.BASE_URL + endpoint, params=params)

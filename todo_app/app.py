@@ -27,7 +27,8 @@ def index():
 @app.route('/add_item', methods=['POST'])
 def add_todo_item():
     item_title = request.form.get('title')
-    trello.add_item(item_title)
+    item_description = request.form.get('description')
+    trello.add_item(item_title, item_description)
     return redirect(url_for('index'))
 
 

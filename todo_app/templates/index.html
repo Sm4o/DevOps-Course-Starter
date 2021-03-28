@@ -9,23 +9,34 @@
 
   <div class="row">
     <div class="col-md-12"> 
-      <h2>Items</h2>
+      <h2>New Item</h2>
       <form action="{{ url_for('add_todo_item') }}" method="post">
+        <label for="title">Title</label>
         <input class="form-control form-control-lg" type="text" name="title" id="title" placeholder="What do you want to do?" required>
-        <label for="title"><em>Press <code>Return</code> to save</em></label>
+        <label for="description">Description</label>
+        <input class="form-control form-control-lg" type="text" name="description" id="description" placeholder="Perhaps a more detailed description?">
+        <button type="submit" class="btn btn-primary">Add</button>
+        <label for="title"><em>or press <code>Return</code> to save</em></label>
       </form>
+
+      <h2>Items</h2>
       {% if not items_list %}
         <b>No items to do yet</b>
       {% endif %}
       {% for item in items_list %}
         <div class="row">
           <div class="col-sm">
-            {% if item.status == 'Done' %}
-              <del><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.name }}</a></del>
+            {% if item.status.value == 'Done' %}
+              <a href="{{ url_for('uncomplete_item', item_id=item.id) }}">
+                <del>{{ item.title }} - {{ item.description }}</a>
+              </a>
             {% else %}
-              <b><a href="{{ url_for('complete_item', item_id=item.id) }}">{{ item.name }}</a></b> 
+              <a href="{{ url_for('complete_item', item_id=item.id) }}">
+                <b>{{ item.title }}</b> - {{ item.description }}
+              </a>
             {% endif %}
-            {% if item.status == 'Done' %}
+
+            {% if item.status.value == 'Done' %}
               <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
             {% else %}
               <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
