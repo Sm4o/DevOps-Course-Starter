@@ -1,3 +1,5 @@
+import os
+
 from flask import (
     Flask,
     render_template, 
@@ -6,43 +8,45 @@ from flask import (
     url_for,
 )
 
-from todo_app.flask_config import Config
-from todo_app.data.session_items import (
-    get_items, 
-    add_item,
-    get_item,
-    save_item,
-    delete_item,
-)
+from todo_app.config import Config, TrelloConfig
+from todo_app.data.trello import Trello, CardStatus
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
+trello = Trello(TrelloConfig.APP_KEY, TrelloConfig.TOKEN, TrelloConfig.BOARD_ID)
+
 
 @app.route('/')
 def index():
-    items_list = get_items()
+    items_list = trello.get_items()
     return render_template('index.html', items_list=items_list)
 
 
 @app.route('/add_item', methods=['POST'])
 def add_todo_item():
     item_title = request.form.get('title')
-    add_item(item_title)
+    item_description = request.form.get('description')
+    trello.add_item(item_title, item_description)
     return redirect(url_for('index'))
 
 
 @app.route('/complete/<item_id>')
 def complete_item(item_id):
-    item = get_item(item_id)
-    item['status'] = 'Completed'
-    save_item(item)
+    trello.update_item(item_id, CardStatus.DONE)
     return redirect(url_for('index'))
 
 
-@app.route('/delete/<int:item_id>')
+@app.route('/uncomplete/<item_id>')
+def uncomplete_item(item_id):
+    trello.update_item(item_id, CardStatus.TODO)
+    return redirect(url_for('index'))
+
+
+@app.route('/delete/<item_id>')
 def remove_item(item_id):
-    item = delete_item(item_id)
+    trello.delete_item(item_id)
     return redirect(url_for('index'))
 
 
