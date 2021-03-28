@@ -10,15 +10,6 @@ class CardStatus(Enum):
     DONE = 'Done'
     TODO = 'To Do'
 
-    @staticmethod
-    def set_card_status(cards: List[dict], board_lists: List[dict]) -> List[dict]:
-        """ Adds card status to Trello cards response """
-        for card in cards:
-            for todo_list in board_lists:
-                if card['idList'] == todo_list['id']:
-                    card['status'] = todo_list['name']
-        return cards
-
     @classmethod
     def get_status(cls, list_id: str, board_lists: List[dict]) -> Enum:
         status = next((list['name'] for list in board_lists if list['id'] == list_id), None)
