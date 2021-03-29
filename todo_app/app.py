@@ -10,6 +10,7 @@ from flask import (
 
 from todo_app.config import Config, TrelloConfig
 from todo_app.data.trello import Trello, CardStatus
+from todo_app.views.views import ViewModel
 
 
 app = Flask(__name__)
@@ -21,7 +22,9 @@ trello = Trello(TrelloConfig.APP_KEY, TrelloConfig.TOKEN, TrelloConfig.BOARD_ID)
 @app.route('/')
 def index():
     items_list = trello.get_items()
-    return render_template('index.html', items_list=items_list)
+    item_view_model = ViewModel(items_list)
+    return render_template('index.html', 
+                           view_model=item_view_model)
 
 
 @app.route('/add_item', methods=['POST'])

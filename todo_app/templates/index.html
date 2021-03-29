@@ -20,10 +20,10 @@
       </form>
 
       <h2>Items</h2>
-      {% if not items_list %}
+      {% if not view_model.items %}
         <b>No items to do yet</b>
       {% endif %}
-      {% for item in items_list %}
+      {% for item in view_model.items %}
         <div class="row">
           <div class="col-sm">
             {% if item.status.value == 'Done' %}
