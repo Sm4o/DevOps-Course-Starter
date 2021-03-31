@@ -41,6 +41,12 @@ def complete_item(item_id):
     return redirect(url_for('index'))
 
 
+@app.route('/do/<item_id>')
+def do_item(item_id):
+    trello.update_item(item_id, CardStatus.DOING)
+    return redirect(url_for('index'))
+
+
 @app.route('/uncomplete/<item_id>')
 def uncomplete_item(item_id):
     trello.update_item(item_id, CardStatus.TODO)

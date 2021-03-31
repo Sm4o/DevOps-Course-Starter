@@ -9,6 +9,7 @@ from todo_app.data.item import Item
 class CardStatus(Enum):
     DONE = 'Done'
     TODO = 'To Do'
+    DOING = 'Doing'
 
     @classmethod
     def get_status(cls, list_id: str, board_lists: List[dict]) -> Enum:
@@ -17,6 +18,8 @@ class CardStatus(Enum):
             return cls.DONE
         elif status == cls.TODO.value:
             return cls.TODO
+        elif status == cls.DOING.value:
+            return cls.DOING
         else:
             raise ValueError('Unknown status')
 
