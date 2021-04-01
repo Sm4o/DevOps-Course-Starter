@@ -64,3 +64,20 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+
+# Running tests
+
+Test the application by running:
+```bash
+$ poetry run pytest
+```
+
+Alternatively use Visual Studio Code Test Explorer extension if you want to use the GUI
+
+To run tests individually:
+```bash
+$ poetry run pytest test_single/test_foo.py
+```
+
+Or in Visual Studio Code simply click on the 'Play' button for the individual file or folder

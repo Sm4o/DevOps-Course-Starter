@@ -54,7 +54,8 @@ class Trello:
             description = card['desc']
             list_id = card['idList'] 
             status = CardStatus.get_status(list_id, self.board_lists)
-            cards.append(Item(id, title, description, status))
+            last_modified_date = card['dateLastActivity']
+            cards.append(Item(id, title, description, status, last_modified_date))
 
         sorted_cards = sorted(cards, key=lambda card: card.status.value, reverse=True) 
         return sorted_cards
