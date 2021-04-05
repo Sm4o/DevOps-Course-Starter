@@ -9,6 +9,7 @@ from todo_app.data.item import Item
 class CardStatus(Enum):
     DONE = 'Done'
     TODO = 'To Do'
+    DOING = 'Doing'
 
     @classmethod
     def get_status(cls, list_id: str, board_lists: List[dict]) -> Enum:
@@ -17,6 +18,8 @@ class CardStatus(Enum):
             return cls.DONE
         elif status == cls.TODO.value:
             return cls.TODO
+        elif status == cls.DOING.value:
+            return cls.DOING
         else:
             raise ValueError('Unknown status')
 
@@ -51,7 +54,8 @@ class Trello:
             description = card['desc']
             list_id = card['idList'] 
             status = CardStatus.get_status(list_id, self.board_lists)
-            cards.append(Item(id, title, description, status))
+            last_modified_date = card['dateLastActivity']
+            cards.append(Item(id, title, description, status, last_modified_date))
 
         sorted_cards = sorted(cards, key=lambda card: card.status.value, reverse=True) 
         return sorted_cards
@@ -67,7 +71,7 @@ class Trello:
 
     def add_item(self, name: str, description: str) -> None:
         """
-        Add a new item with the specified title to the Trello.
+        Add a new item with the specified title to Trello.
 
         Args:
             name: The name of the item.
@@ -81,8 +85,7 @@ class Trello:
             'desc': description,
             'idList': todo_list['id'],
         }
-        resp = requests.post(self.BASE_URL + endpoint, params=params)
-        return resp.json()    
+        requests.post(self.BASE_URL + endpoint, params=params)
 
     def delete_item(self, card_id: str) -> None:
         """

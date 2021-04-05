@@ -64,3 +64,21 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+
+# Running tests
+
+Run Unit and Integration tests:
+```bash
+$ pytest tests
+```
+
+Run End-To-End tests with Selenium 
+```bash
+$ pytest tests_e2e
+```
+
+To run tests individually:
+```bash
+$ pytest test_single/test_foo.py
+```
