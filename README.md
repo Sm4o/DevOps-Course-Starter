@@ -68,16 +68,17 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 
 # Running tests
 
-Test the application by running:
+Run Unit and Integration tests:
 ```bash
-$ poetry run pytest
+$ pytest tests
 ```
 
-Alternatively use Visual Studio Code Test Explorer extension if you want to use the GUI
+Run End-To-End tests with Selenium 
+```bash
+$ pytest tests_e2e
+```
 
 To run tests individually:
 ```bash
-$ poetry run pytest test_single/test_foo.py
+$ pytest test_single/test_foo.py
 ```
-
-Or in Visual Studio Code simply click on the 'Play' button for the individual file or folder

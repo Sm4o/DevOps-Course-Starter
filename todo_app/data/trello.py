@@ -71,7 +71,7 @@ class Trello:
 
     def add_item(self, name: str, description: str) -> None:
         """
-        Add a new item with the specified title to the Trello.
+        Add a new item with the specified title to Trello.
 
         Args:
             name: The name of the item.

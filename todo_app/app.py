@@ -13,12 +13,11 @@ from todo_app.data.trello import Trello, CardStatus
 from todo_app.views.views import ViewModel
 
 
-trello = Trello(TrelloConfig.APP_KEY, TrelloConfig.TOKEN, TrelloConfig.BOARD_ID)
-
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    trello = Trello(TrelloConfig.APP_KEY, TrelloConfig.TOKEN, TrelloConfig.BOARD_ID)
 
     @app.route('/')
     def index():

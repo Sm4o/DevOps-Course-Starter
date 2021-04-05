@@ -121,3 +121,6 @@ env/
 
 # VS Code settings
 .vscode
+
+# Geckodriver
+geckodriver.log
