@@ -85,8 +85,7 @@ class Trello:
             'desc': description,
             'idList': todo_list['id'],
         }
-        resp = requests.post(self.BASE_URL + endpoint, params=params)
-        return resp.json()    
+        requests.post(self.BASE_URL + endpoint, params=params)
 
     def delete_item(self, card_id: str) -> None:
         """
