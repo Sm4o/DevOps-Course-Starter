@@ -20,32 +20,62 @@
       </form>
 
       <h2>Items</h2>
-      {% if not items_list %}
-        <b>No items to do yet</b>
+      <h4>Doing</h4>
+      {% if not view_model.items_doing %}
+        No items in progress
       {% endif %}
-      {% for item in items_list %}
+      {% for item in view_model.items_doing %}
         <div class="row">
           <div class="col-sm">
-            {% if item.status.value == 'Done' %}
-              <a href="{{ url_for('uncomplete_item', item_id=item.id) }}">
-                <del>{{ item.title }} - {{ item.description }}</a>
-              </a>
-            {% else %}
-              <a href="{{ url_for('complete_item', item_id=item.id) }}">
-                <b>{{ item.title }}</b> - {{ item.description }}
-              </a>
-            {% endif %}
-
-            {% if item.status.value == 'Done' %}
-              <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
-            {% else %}
-              <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
-            {% endif %}
+            <b>{{ item.title }}</b> - {{ item.description }}
+            <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
             <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
           </div>
         </div>
       {% endfor %}
+      <h4>To-Do</h4>
+      {% if not view_model.items_todo %}
+        No items to do yet
+      {% endif %}
+      {% for item in view_model.items_todo %}
+        <div class="row">
+          <div class="col-sm">
+            <b>{{ item.title }}</b> - {{ item.description }}
+            <a href="{{ url_for('do_item', item_id=item.id) }}" class="btn btn-primary btn-sm" role="button">Mark as Doing</a>
+            <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
+            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+      <h4>Completed</h4>
+      {% if not view_model.recent_done_items %}
+        No recent items completed yet
+      {% endif %}
+      {% for item in view_model.recent_done_items %}
+        <div class="row">
+          <div class="col-sm">
+            <del>{{ item.title }} - {{ item.description }}</del>
+            <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
+            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+      {% if view_model.older_done_items %}
+        <details>
+          <summary>Older items</summary>
+          {% for item in view_model.older_done_items %}
+            <div class="row">
+              <div class="col-sm">
+                <del>{{ item.title }} - {{ item.description }}</del>
+                <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
+                <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+              </div>
+            </div>
+          {% endfor %}
+        </details>
+      {% endif %}
       </div>
     </div>
   </div>
+  <div style="margin-bottom:100px"></div>
 {% endblock %}
