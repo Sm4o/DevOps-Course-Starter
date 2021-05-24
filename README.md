@@ -9,9 +9,14 @@ To store ToDo items, the project uses as Trello's REST API. To set it up:
 
 3. Save credentials to `.env` file as shown in `.env.template`:
     ```
+    # Flask server configuration.
+    FLASK_APP=todo_app/app
+    FLASK_ENV=development
+
+    # Trello REST API credentials
     APP_KEY=...
     TOKEN=...
-    BOARD_ID=...
+    BOARD_ID=....
     ```
 
 ## System Requirements
@@ -64,3 +69,22 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+
+# Running tests
+
+Run Unit and Integration tests:
+```bash
+$ poetry run pytest tests
+```
+
+Run End-To-End tests with Selenium 
+```bash
+$ poetry run pytest tests_e2e
+```
+**Note:** Need to have geckodriver in `$PATH` as Selenium tests are automated using Firefox browser.
+
+To run tests individually:
+```bash
+$ poetry run pytest test_single/test_foo.py
+```
