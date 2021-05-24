@@ -1,5 +1,6 @@
 import os
 
+
 class TrelloConfig:
     """ Configuration variables for Trello API """
     BOARD_ID = os.environ.get('BOARD_ID')

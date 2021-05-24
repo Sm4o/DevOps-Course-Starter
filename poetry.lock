@@ -1,5 +1,4 @@
-[[package]]
-name = "atomicwrites"
+[[package]]name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
 category = "main"

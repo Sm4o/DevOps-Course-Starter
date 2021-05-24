@@ -7,3 +7,4 @@ class Item:
         self.description = description
         self.status = status
         self.last_modified_date = last_modified_date
+

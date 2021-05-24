@@ -25,7 +25,6 @@ def create_app():
         return render_template('index.html', 
                             view_model=item_view_model)
 
-
     @app.route('/add_item', methods=['POST'])
     def add_todo_item():
         item_title = request.form.get('title')
@@ -33,24 +32,20 @@ def create_app():
         trello.add_item(item_title, item_description)
         return redirect(url_for('index'))
 
-
     @app.route('/complete/<item_id>')
     def complete_item(item_id):
         trello.update_item(item_id, CardStatus.DONE)
         return redirect(url_for('index'))
-
 
     @app.route('/do/<item_id>')
     def do_item(item_id):
         trello.update_item(item_id, CardStatus.DOING)
         return redirect(url_for('index'))
 
-
     @app.route('/uncomplete/<item_id>')
     def uncomplete_item(item_id):
         trello.update_item(item_id, CardStatus.TODO)
         return redirect(url_for('index'))
-
 
     @app.route('/delete/<item_id>')
     def remove_item(item_id):
