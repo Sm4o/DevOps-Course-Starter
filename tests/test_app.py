@@ -6,37 +6,10 @@ from dotenv import find_dotenv, load_dotenv
 
 from todo_app import app
 
-TEST_BOARD_ID = os.environ.get('BOARD_ID')
 
+def mock_get_response(url, params):
+    TEST_BOARD_ID = os.environ.get('BOARD_ID')
 
-@pytest.fixture
-def client():
-    # Use our test integration config instead of the 'real' version
-    file_path = find_dotenv('.env.test')
-    load_dotenv(file_path, override=True)
-
-    # Create the new app
-    test_app = app.create_app()
-
-    # Use the app to create a test_client that can be used in our tests
-    with test_app.test_client() as client:
-        yield client
-
-
-def mock_get_lists():
-    response = Mock()
-    response.json.return_value = [
-        {
-            "id": "12345678",
-            "name": "To Do",
-            "idBoard": "0123456789",
-            "subscribed": False
-        },
-    ]
-    return response
-
-
-def mock_get_cards(url, params):
     if url == f'https://api.trello.com/1/boards/{TEST_BOARD_ID}/cards':
         response = Mock()
         response.json.return_value = [
@@ -52,67 +25,107 @@ def mock_get_cards(url, params):
             },
         ]
         return response
-
+    elif url == f'https://api.trello.com/1/boards/{TEST_BOARD_ID}/lists':
+        response = Mock()
+        response.json.return_value = [
+            {
+                "id": "604e8d8f40bbb0669d50314e",
+                "name": "To Do",
+                "idBoard": "0123456789",
+                "subscribed": False
+            },
+            {
+                "id": "DoneID",
+                "name": "Done",
+                "idBoard": "0123456789",
+                "subscribed": False
+            },
+            {
+                "id": "DoingID",
+                "name": "Doing",
+                "idBoard": "0123456789",
+                "subscribed": False
+            },
+        ]
+        return response
     return None
 
-@patch('todo_app.app.Trello')
+
+@pytest.fixture
+def client():
+    # Use our test integration config instead of the 'real' version
+    file_path = find_dotenv('.env.test')
+    load_dotenv(file_path, override=True)
+
+    # Create the new app
+    with patch('requests.get') as mock_get_requests:
+        mock_get_requests.side_effect = mock_get_response
+        test_app = app.create_app()
+
+    # Use the app to create a test_client that can be used in our tests
+    with test_app.test_client() as client:
+        yield client
+
+
 @patch('requests.get')  
-def test_index_page(mock_get_requests, mock_trello, client):
-    mock_trello.get_board_lists.side_effect = mock_get_lists 
-    mock_get_requests.side_effect = mock_get_cards
+def test_index_page(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_response
     response = client.get('/')
-    assert 'name - description' in response.get_data(as_text=True)
+    response_text = response.get_data(as_text=True)
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 
 
 
-@patch('todo_app.app.Trello')
 @patch('requests.post')  
 @patch('requests.get')  
-def test_add_todo_item(mock_get_requests, mock_post_requests, mock_trello, client):
-    mock_trello.get_board_lists.side_effect = mock_get_lists 
+def test_add_todo_item(mock_get_requests, mock_post_requests, client):
     mock_post_requests.side_effect = None 
-    mock_get_requests.side_effect = mock_get_cards
+    mock_get_requests.side_effect = mock_get_response
 
     response = client.post('/add_item', data=dict(
         title='name',
         description='description',
     ), follow_redirects=True)
-    assert 'name - description' in response.get_data(as_text=True)
+    response_text = response.get_data(as_text=True)
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 
 
 
-@patch('todo_app.app.Trello')
 @patch('requests.get')  
-def test_complete_item(mock_get_requests, mock_trello, client):
-    mock_trello.get_board_lists.side_effect = mock_get_lists 
-    mock_get_requests.side_effect = mock_get_cards
+def test_complete_item(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_response
 
     response = client.get('/complete/1', follow_redirects=True)
-    assert 'name - description' in response.get_data(as_text=True)
+    response_text = response.get_data(as_text=True)
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 
 
-@patch('todo_app.app.Trello')
+
 @patch('requests.get')  
-def test_do_item(mock_get_requests, mock_trello, client):
-    mock_trello.get_board_lists.side_effect = mock_get_lists 
-    mock_get_requests.side_effect = mock_get_cards
+def test_do_item(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_response
 
     response = client.get('/do/1', follow_redirects=True)
-    assert 'name - description' in response.get_data(as_text=True)
+    response_text = response.get_data(as_text=True)
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 
 
 
-@patch('todo_app.app.Trello')
 @patch('requests.get')  
-def test_uncomplete_item(mock_get_requests, mock_trello, client):
-    mock_trello.get_board_lists.side_effect = mock_get_lists 
-    mock_get_requests.side_effect = mock_get_cards
+def test_uncomplete_item(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_response
 
     response = client.get('/uncomplete/1', follow_redirects=True)
-    assert 'name - description' in response.get_data(as_text=True)
+    response_text = response.get_data(as_text=True)
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 
 
 
-@patch('todo_app.app.Trello')
 @patch('requests.get')  
-def test_remove_item(mock_get_requests, mock_trello, client):
-    mock_trello.get_board_lists.side_effect = mock_get_lists 
-    mock_get_requests.side_effect = mock_get_cards
+def test_remove_item(mock_get_requests, client):
+    mock_get_requests.side_effect = mock_get_response
 
     response = client.get('/delete/1', follow_redirects=True)
-    assert 'name - description' in response.get_data(as_text=True)
+    response_text = response.get_data(as_text=True)
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 

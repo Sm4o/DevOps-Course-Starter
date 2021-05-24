@@ -18,7 +18,7 @@ def test_filter_items():
     assert item_view_model.items_done == items[-1:]
 
 
-def test_show_all_done_items():
+def test_show_all_done_items_is_true_for_fewer_than_five_cards():
     """ Only show all done items if less than 5 done items """
     items = [
         Item('1', 'item', 'description', CardStatus.DOING, '2021-03-31T16:47:17.915Z'),
@@ -28,6 +28,8 @@ def test_show_all_done_items():
     item_view_model = ViewModel(items)
     assert item_view_model.show_all_done_items == True
 
+
+def test_show_all_done_items_is_false_for_five_or_more_cards():
     items = [
         Item('1', 'item', 'description', CardStatus.DOING, '2021-03-31T16:47:17.915Z'),
         Item('2', 'item', 'description', CardStatus.TODO, '2021-03-31T16:47:17.915Z'),

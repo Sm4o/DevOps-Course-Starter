@@ -1,5 +1,4 @@
 
-
 class Item:
     def __init__(self, id: str, title: str, description: str,
             status: str, last_modified_date: str) -> None:

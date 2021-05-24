@@ -11,12 +11,6 @@ from enum import Enum
 class ViewModel:
     def __init__(self, items: List[Item]):
         self._items = items
-        self._items_todo = None 
-        self._items_done = None
-        self._items_doing = None
-        self._show_all_done_items = None 
-        self._recent_done_items = None
-        self._older_done_itmes = None
 
     @property
     def items(self):

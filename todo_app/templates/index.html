@@ -27,9 +27,7 @@
       {% for item in view_model.items_doing %}
         <div class="row">
           <div class="col-sm">
-            <a href="{{ url_for('complete_item', item_id=item.id) }}">
-              <b>{{ item.title }}</b> - {{ item.description }}
-            </a>
+            <b>{{ item.title }}</b> - {{ item.description }}
             <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
             <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
           </div>
@@ -42,9 +40,7 @@
       {% for item in view_model.items_todo %}
         <div class="row">
           <div class="col-sm">
-            <a href="{{ url_for('complete_item', item_id=item.id) }}">
-              <b>{{ item.title }}</b> - {{ item.description }}
-            </a>
+            <b>{{ item.title }}</b> - {{ item.description }}
             <a href="{{ url_for('do_item', item_id=item.id) }}" class="btn btn-primary btn-sm" role="button">Mark as Doing</a>
             <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
             <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
@@ -58,9 +54,7 @@
       {% for item in view_model.recent_done_items %}
         <div class="row">
           <div class="col-sm">
-            <a href="{{ url_for('uncomplete_item', item_id=item.id) }}">
-              <del>{{ item.title }} - {{ item.description }}</a>
-            </a>
+            <del>{{ item.title }} - {{ item.description }}</del>
             <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
             <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
           </div>
@@ -72,9 +66,7 @@
           {% for item in view_model.older_done_items %}
             <div class="row">
               <div class="col-sm">
-                <a href="{{ url_for('uncomplete_item', item_id=item.id) }}">
-                  <del>{{ item.title }} - {{ item.description }}</a>
-                </a>
+                <del>{{ item.title }} - {{ item.description }}</del>
                 <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
                 <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
               </div>

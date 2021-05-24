@@ -5,7 +5,6 @@ from threading import Thread
 import pytest
 import requests
 from dotenv import find_dotenv, load_dotenv
-from requests.api import delete
 from selenium import webdriver
 
 
