@@ -129,4 +129,4 @@ geckodriver.log
 .vagrant
 
 # App logs
-logs.txt
+gunicorn.log

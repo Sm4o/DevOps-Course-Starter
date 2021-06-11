@@ -1,12 +1,15 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/bionic64"
   config.vm.network "forwarded_port", guest: 5000, host: 5000
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+  config.vm.provision "shell", privileged: true, inline: <<-SHELL
     # Installing prerequisites for pyenv
-    sudo apt-get update; sudo apt-get -y install make build-essential libssl-dev zlib1g-dev \
+    apt-get update
+    apt-get -y install make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+  SHELL
 
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
     # Install pyenv
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
@@ -30,7 +33,8 @@ Vagrant.configure("2") do |config|
     trigger.run_remote = {privileged: false, inline: "
       cd /vagrant
       poetry install
-      nohup poetry run flask run --host 0.0.0.0 > logs.txt 2>&1 &
+      export `cat .env | grep '^[A-Z]' | sed 's/\r//' | xargs`
+      poetry run gunicorn --reload --bind 0.0.0.0:5000 'todo_app.app:create_app()' --daemon --error-logfile gunicorn.log
     "}
   end
 end
