@@ -53,7 +53,7 @@ $ cp .env.template .env  # (first time only)
 
 The `.env` file is used by flask/WSGI server to set environment variables. This enables things like development mode (which also enables features like hot reloading when you make a file change).
 
-## Running the App
+## Running the App in Vagrant
 
 Vagrant uses a declarative configuration file, `Vagrantfile` in the root folder. Vagrant will provision a virtual machine and install all dependencies before starting the app by running the below command:
 ```bash
@@ -108,6 +108,25 @@ Bringing machine 'default' up with 'virtualbox' provider...
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
 To troubleshoot any errors on the app check the `gunicorn.log`.
+
+# Running the App in Docker
+Make sure Docker is installed and you are logged into Docker Hub. The Dockerfile uses multi-stage builds in order to separate the production and development environments.
+
+- Build commands:
+``` bash
+docker build --target production --tag todo.app:prod .
+```
+``` bash
+docker build --target development --tag todo.app:dev .
+```
+
+To run the app:
+``` bash
+docker run --env-file .env -p 5000:5000 todo.app:prod
+```
+``` bash
+docker run --env-file .env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:dev
+```
 
 # Running tests
 
