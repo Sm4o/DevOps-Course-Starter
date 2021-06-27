@@ -16,7 +16,7 @@ from todo_app.views.views import ViewModel
 def create_app():
     app = Flask(__name__)
 
-    trello = Trello(TrelloConfig.APP_KEY, TrelloConfig.TOKEN, TrelloConfig.BOARD_ID)
+    trello = Trello(TrelloConfig().APP_KEY, TrelloConfig().TOKEN, TrelloConfig().BOARD_ID)
 
     @app.route('/')
     def index():
