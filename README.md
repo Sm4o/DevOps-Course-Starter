@@ -128,6 +128,11 @@ docker run --env-file .env -p 5000:5000 todo.app:prod
 docker run --env-file .env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:dev
 ```
 
+To launch the development app easier you can use docker-compose command:
+``` bash
+docker-compose up -d --build 
+```
+
 # Running tests
 
 Run Unit and Integration tests:
