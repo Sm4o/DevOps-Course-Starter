@@ -7,21 +7,17 @@ import requests
 from dotenv import find_dotenv, load_dotenv
 from selenium import webdriver
 
-
-# Loading environment variables 
-file_path = find_dotenv('.env')
-load_dotenv(file_path, override=True)
+from todo_app import app
 
 BASE_URL = "https://api.trello.com/1/"
-API_KEY = os.environ.get('APP_KEY')
-TOKEN = os.environ.get('TOKEN')
 
 
-def create_trello_board():
+def create_trello_board(api_key, token):
+    print(api_key, token)
     endpoint = 'boards'
     params = {
-        'key': API_KEY,
-        'token': TOKEN,
+        'key': api_key,
+        'token': token,
         'name': "Corndel ToDo-List App E2E Tests",
     }
     response = requests.post(BASE_URL + endpoint, params=params)
@@ -30,23 +26,30 @@ def create_trello_board():
     return board_id
 
 
-def delete_trello_board(board_id):
+def delete_trello_board(board_id, api_key, token):
+    print(api_key, token)
     endpoint = f'boards/{board_id}'
     params = {
-        'key': API_KEY,
-        'token': TOKEN,
+        'key': api_key,
+        'token': token,
     }
     requests.delete(BASE_URL + endpoint, params=params)
 
 
 @pytest.fixture(scope='module')
 def app_with_temp_board():
+    # Loading environment variables 
+    file_path = find_dotenv('.env')
+    load_dotenv(file_path, override=True)
+    
+    API_KEY = os.environ.get('APP_KEY')
+    TOKEN = os.environ.get('TOKEN')
+
     # Create new board & update the board id environment variable
-    board_id = create_trello_board()
+    board_id = create_trello_board(API_KEY, TOKEN)
     os.environ['BOARD_ID'] = board_id
 
     # Construct the new application
-    from todo_app import app  # FIXME: I was forced to import here, otherwise loads with old BOARD_ID
     application = app.create_app() 
 
     # Start the app in its own thread.
@@ -57,7 +60,7 @@ def app_with_temp_board():
 
     # Tear Down
     thread.join(1)
-    delete_trello_board(board_id)
+    delete_trello_board(board_id, API_KEY, TOKEN)
 
 
 @pytest.fixture(scope="module")
@@ -73,7 +76,6 @@ def test_task_journey(driver, app_with_temp_board):
     driver.get('http://localhost:5000/')
 
     assert driver.title == 'To-Do App' 
-
 
 def test_create_task(driver, app_with_temp_board):
     time.sleep(3)
