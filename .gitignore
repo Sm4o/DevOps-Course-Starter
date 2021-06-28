@@ -124,3 +124,9 @@ env/
 
 # Geckodriver
 geckodriver.log
+
+# Vagrant files
+.vagrant
+
+# App logs
+gunicorn.log
