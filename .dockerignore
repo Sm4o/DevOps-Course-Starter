@@ -1,11 +1,12 @@
 .vagrant
+Vagrantfile
 .github
 .pytest_cache
 .vscode
 __pycache__
-geckodriver.log
+geckodriver
 .gitignore
-.env
-.env.template
+.env*
 .git
 .venv
+docker*.yaml

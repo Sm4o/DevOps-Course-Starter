@@ -25,7 +25,7 @@ To store ToDo items, the project uses as Trello's REST API. To set it up:
 ### SSH
 Make sure you have created SSH keys and are able to use them to [connect to a remote machine](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh)
 
-The project uses Vagrant to run the To Do app in a virtual machine that encapsulates the development environment in a single configuration file, making it easy to share and launch with a single command, `vagrant up`. To prepare your system, ensure you have an official distribution of Python version 3.7+. 
+The project uses Vagrant to run the To Do app in a virtual machine that encapsulates the development environment in a single configuration file, making it easy to share and launch with a single command, `vagrant up`.
 
 ### Hypervisor
 Vagrant requires a hypervisor installed on your development machine. Oracle VirtualBox is a free cross-platform hypervisor, or if you are on Windows then Hyper-V is also an option.
@@ -64,35 +64,6 @@ You should see output similar to the following:
 ```bash
 Bringing machine 'default' up with 'virtualbox' provider...
 ==> default: Checking if box 'hashicorp/bionic64' version '1.0.282' is up to date...
-==> default: Clearing any previously set forwarded ports...
-==> default: Clearing any previously set network interfaces...
-==> default: Preparing network interfaces based on configuration...
-    default: Adapter 1: nat
-==> default: Forwarding ports...
-    default: 5000 (guest) => 5000 (host) (adapter 1)
-    default: 22 (guest) => 2222 (host) (adapter 1)
-==> default: Booting VM...
-==> default: Waiting for machine to boot. This may take a few minutes...
-    default: SSH address: 127.0.0.1:2222
-    default: SSH username: vagrant
-    default: SSH auth method: private key
-==> default: Machine booted and ready!
-==> default: Checking for guest additions in VM...
-    default: The guest additions on this VM do not match the installed version of
-    default: VirtualBox! In most cases this is fine, but in rare cases it can
-    default: prevent things such as shared folders from working properly. If you see
-    default: shared folder errors, please make sure the guest additions within the
-    default: virtual machine match the version of VirtualBox you have installed on
-    default: your host and reload your VM.
-    default: 
-    default: Guest Additions Version: 6.0.10
-    default: VirtualBox Version: 6.1
-==> default: Mounting shared folders...
-    default: /vagrant => /Users/mktszp/Documents/Corndel/projects/DevOps-Course-Starter
-==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
-==> default: flag to force provisioning. Provisioners marked to run always will still run.
-==> default: Running action triggers after up ...
-==> default: Running trigger: Launching App...
 ==> default: Running the TODO app setup script
     default: Running: inline script
     default: Installing dependencies from lock file
@@ -119,6 +90,9 @@ docker build --target production --tag todo.app:prod .
 ``` bash
 docker build --target development --tag todo.app:dev .
 ```
+``` bash
+docker build --target test --tag todo.app:test .
+```
 
 To run the app:
 ``` bash
@@ -127,13 +101,16 @@ docker run --env-file .env -p 5000:5000 todo.app:prod
 ``` bash
 docker run --env-file .env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:dev
 ```
+``` bash
+docker run --env-file .env --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test
+```
 
 To launch the development app easier you can use docker-compose command:
 ``` bash
 docker-compose up -d --build 
 ```
 
-# Running tests
+# Running tests locally
 
 Run Unit and Integration tests:
 ```bash
