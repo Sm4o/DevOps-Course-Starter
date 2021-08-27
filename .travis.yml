@@ -1,5 +1,3 @@
-language: python
-
 env:
  - COMPOSE_VERSION=3.9
 
@@ -10,7 +8,7 @@ before_install:
  - sudo mv docker-compose /usr/local/bin
 
 services:
-  - docker-compose build
+  - docker
 
 script:
-- docker-compose build
+- docker-compose up --build
