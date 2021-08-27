@@ -1,2 +1,7 @@
+language: python
+
+services:
+  - docker
+
 script:
-- echo "hello world"
+- docker run --env-file .env -p 5000:5000 todo.app:prod
