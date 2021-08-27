@@ -1,7 +1,16 @@
 language: python
 
+env:
+ - COMPOSE_VERSION=3.9
+
+before_install:
+ - sudo rm /usr/local/bin/docker-compose
+ - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+ - chmod +x docker-compose
+ - sudo mv docker-compose /usr/local/bin
+
 services:
-  - docker
+  - docker-compose build
 
 script:
-- docker run --env-file .env -p 5000:5000 todo.app:prod
+- docker-compose build
