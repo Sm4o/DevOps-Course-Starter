@@ -5,11 +5,13 @@ services:
 env:
  - COMPOSE_VERSION=3.9
 
-before_install:
- - sudo rm /usr/local/bin/docker-compose
- - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
- - chmod +x docker-compose
- - sudo mv docker-compose /usr/local/bin
+# before_install:
+#  - sudo rm /usr/local/bin/docker-compose
+#  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+#  - chmod +x docker-compose
+#  - sudo mv docker-compose /usr/local/bin
 
 script:
-- docker-compose up --build
+- docker build --target test --tag todo.app:test .
+# Unit & integration tests
+- docker run --env-file .env.test --entrypoint="poetry run pytest" todo.app:test tests
