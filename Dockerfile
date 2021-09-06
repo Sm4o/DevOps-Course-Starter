@@ -30,4 +30,4 @@ ENV MOZ_HEADLESS=1
 EXPOSE 4444
 COPY . /srv
 # ENTRYPOINT poetry run ptw --poll
-ENTRYPOINT poetry run pytest 
+ENTRYPOINT ["poetry", "run", "pytest"] 
