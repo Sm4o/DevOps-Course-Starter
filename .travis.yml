@@ -1,4 +1,4 @@
-sudo: required
+# sudo: required
 services:
   - docker
 
@@ -14,4 +14,4 @@ env:
 script:
 - docker build --target test --tag todo.app:test .
 # Unit & integration tests
-- docker run --env-file .env.test --entrypoint="poetry run pytest" todo.app:test tests
+- docker run --env-file .env.test todo.app:test tests
