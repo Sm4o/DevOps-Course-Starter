@@ -39,8 +39,8 @@ def delete_trello_board(board_id, api_key, token):
 @pytest.fixture(scope='module')
 def app_with_temp_board():
     # Loading environment variables 
-    file_path = find_dotenv('.env')
-    load_dotenv(file_path, override=True)
+    # file_path = find_dotenv('.env')
+    # load_dotenv(file_path, override=True)
     
     API_KEY = os.environ.get('APP_KEY')
     TOKEN = os.environ.get('TOKEN')
