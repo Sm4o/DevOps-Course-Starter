@@ -1,17 +1,10 @@
-# sudo: required
 services:
   - docker
 
 env:
  - COMPOSE_VERSION=3.9
 
-# before_install:
-#  - sudo rm /usr/local/bin/docker-compose
-#  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-#  - chmod +x docker-compose
-#  - sudo mv docker-compose /usr/local/bin
-
 script:
 - docker build --target test --tag todo.app:test .
 # Unit & integration tests
-- docker run --env-file .env.test todo.app:test tests/
+- docker run --env-file .env.test todo.app:test tests_e2e/
