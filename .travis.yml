@@ -7,5 +7,4 @@ env:
 script:
 - docker build --target test --tag todo.app:test .
 # Unit & integration tests
-# - docker run --env-file .env.test todo.app:test tests_e2e/
-- docker run --env-file .env --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test
+- docker run --env-file .env.test --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test
