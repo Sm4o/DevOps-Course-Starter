@@ -29,4 +29,5 @@ RUN BASE_URL=https://github.com/mozilla/geckodriver/releases/download \
 ENV MOZ_HEADLESS=1
 EXPOSE 4444
 COPY . /srv
-ENTRYPOINT poetry run ptw --poll
+# ENTRYPOINT poetry run ptw --poll
+ENTRYPOINT ["poetry", "run", "pytest"] 

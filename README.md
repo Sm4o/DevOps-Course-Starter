@@ -127,3 +127,11 @@ To run tests individually:
 ```bash
 $ poetry run pytest test_single/test_foo.py
 ```
+
+# Travis testing
+Everytime a pull request is created or updated Travis CI will build the code and run all tests.
+To run the E2E tests it needs live Trello API credentials, which are stored as encrypted environment variables in `.travis.yml`
+
+```bash
+$ travis encrypt TOKEN="example" --add
+```

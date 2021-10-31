@@ -38,6 +38,7 @@ def delete_trello_board(board_id, api_key, token):
 
 @pytest.fixture(scope='module')
 def app_with_temp_board():
+    # Remove if it causes issues with Travis environment variables
     # Loading environment variables 
     file_path = find_dotenv('.env')
     load_dotenv(file_path, override=True)
