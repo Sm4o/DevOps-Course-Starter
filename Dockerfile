@@ -10,7 +10,7 @@ EXPOSE 5000
 
 FROM base as production
 ENV FLASK_ENV=production
-ENTRYPOINT poetry run gunicorn --bind 0.0.0.0:5000 'todo_app.app:create_app()' 
+RUN chmod +x ./entrypoint.sh
 
 FROM base as development
 ENV FLASK_ENV=development
