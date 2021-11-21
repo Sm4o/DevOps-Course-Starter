@@ -10,7 +10,9 @@ EXPOSE 5000
 
 FROM base as production
 ENV FLASK_ENV=production
-RUN chmod +x ./entrypoint.sh
+RUN poetry install --no-dev \ 
+  && chmod +x ./entrypoint.sh
+ENTRYPOINT ./entrypoint.sh
 
 FROM base as development
 ENV FLASK_ENV=development
