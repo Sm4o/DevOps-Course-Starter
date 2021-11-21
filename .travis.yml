@@ -17,5 +17,5 @@ notifications:
 before_script:
 - docker login --username sm4o --password "$DOCKER_HUB_PASSWORD"
 script:
-- ./scripts/run_tests.sh 
+- ./scripts/run_tests.sh
 - ./scripts/run_build.sh 
