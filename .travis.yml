@@ -16,7 +16,7 @@ notifications:
     on_failure: always
 before_script:
 # - docker login --username sm4o --password "$DOCKER_HUB_PASSWORD"
-- echo "${DOCKER_HUB_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin
+- echo "${DOCKER_HUB_PASSWORD}" | docker login --username sm4o --password-stdin
 
 script:
 - ./scripts/run_tests.sh
