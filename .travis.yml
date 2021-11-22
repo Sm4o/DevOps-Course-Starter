@@ -17,7 +17,6 @@ notifications:
     on_failure: always
 before_script:
 - echo "${DOCKER_HUB_PASSWORD}" | docker login --username sm4o --password-stdin
-- docker login --username=_ --password="${HEROKU_API_KEY}" registry.heroku.com
 script:
 - "./scripts/run_tests.sh"
 - "./scripts/run_build.sh"
