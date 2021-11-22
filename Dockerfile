@@ -4,7 +4,7 @@ WORKDIR /srv
 #Update the system and install additional package
 RUN apt-get update && apt-get install -y curl wget
 COPY poetry.toml poetry.lock pyproject.toml /srv/
-RUN pip install poetry && poetry config virtualenvs.create false && poetry install
+RUN pip install poetry
 COPY todo_app /srv/todo_app
 EXPOSE 5000
 
@@ -12,16 +12,19 @@ FROM base as production
 ENV FLASK_ENV=production
 COPY entrypoint.sh .
 RUN poetry config virtualenvs.create false --local \
-  && poetry install --no-dev \ 
+  && poetry install \ 
   && chmod +x ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ./entrypoint.sh
 
 FROM base as development
 ENV FLASK_ENV=development
+RUN poetry install
 ENTRYPOINT poetry run flask run -h 0.0.0.0 -p 5000
 
 FROM base as test
 RUN apt-get install -y firefox-esr
+RUN poetry install
 
 # Install the latest version of Geckodriver:
 RUN BASE_URL=https://github.com/mozilla/geckodriver/releases/download \
