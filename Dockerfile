@@ -11,7 +11,8 @@ EXPOSE 5000
 FROM base as production
 ENV FLASK_ENV=production
 COPY entrypoint.sh .
-RUN poetry install --no-dev \ 
+RUN poetry config virtualenvs.create false --local \
+  && poetry install --no-dev \ 
   && chmod +x ./entrypoint.sh
 ENTRYPOINT ./entrypoint.sh
 
