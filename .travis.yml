@@ -26,4 +26,4 @@ deploy:
   provider: script
   script: bash ./deploy_heroku.sh
   on:
-    branch: master
+    branch: module_8 
