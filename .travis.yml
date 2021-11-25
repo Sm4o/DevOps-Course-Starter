@@ -24,6 +24,6 @@ script:
 - "./scripts/run_build.sh"
 deploy:
   provider: script
-  script: bash ./deploy_heroku.sh
+  script: bash ./scripts/deploy_heroku.sh
   on:
     branch: module_8 
