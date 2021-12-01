@@ -7,3 +7,8 @@ class TrelloConfig:
         self.BOARD_ID = os.environ.get('BOARD_ID')
         self.APP_KEY = os.environ.get('APP_KEY')
         self.TOKEN = os.environ.get('TOKEN')
+
+class Config:
+    def __init__(self):
+        self.MONGODB_CONNECTION = os.environ.get('MONGODB_CONNECTION')
+        self.DATABASE_NAME = os.environ.get('DATABASE_NAME')
