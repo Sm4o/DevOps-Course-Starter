@@ -149,3 +149,5 @@ $ travis encrypt --pro MONGODB_CONNECTION="example" --add
 
 Also everytime a pull request is created or updated Travis CI will deploy the main branch to production
 Live production instance is hosted on Heroku: https://todo-app-corndel.herokuapp.com/
+
+Remember to setup some heroku environment variables too

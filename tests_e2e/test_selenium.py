@@ -14,8 +14,8 @@ from todo_app import app
 def app_with_temp_database():
     # Remove if it causes issues with Travis environment variables
     # Loading environment variables 
-    file_path = find_dotenv('.env')
-    load_dotenv(file_path, override=True)
+    # file_path = find_dotenv('.env')
+    # load_dotenv(file_path, override=True)
 
     os.environ['DATABASE_NAME'] += '_test'
 
@@ -33,7 +33,7 @@ def app_with_temp_database():
 
     # Drop test database
     mongo_client = pymongo.MongoClient(os.environ.get("MONGODB_CONNECTION"))
-    mongo_client.drop_database(os.environ['DATABASE_NAME'])
+    mongo_client.drop_database(os.environ.get('DATABASE_NAME'))
 
 
 @pytest.fixture(scope="module")
