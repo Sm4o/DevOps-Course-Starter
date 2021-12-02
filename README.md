@@ -132,6 +132,8 @@ $ poetry run pytest test_single/test_foo.py
 Everytime a pull request is created or updated Travis CI will build the code and run all tests.
 To run the E2E tests it needs live Trello API credentials, which are stored as encrypted environment variables in `.travis.yml`
 
+To use Travis CLI you need to login with `travis login --com --github-token <personal-access-token>` which you can generate [here](https://github.com/settings/tokens)
+
 (First time only)
 ```bash
 $ travis encrypt TOKEN="example" --add
