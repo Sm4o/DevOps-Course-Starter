@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 from datetime import datetime
 from typing import List
@@ -26,10 +27,9 @@ class CardStatus(Enum):
 
 
 class MongoDB:
-    def __init__(self, connection_string: str, database_name: str) -> None:
-        self.database_name = database_name
-        self.client = pymongo.MongoClient(connection_string)
-        self.items = self.client.todo_app_db.items
+    def __init__(self) -> None:
+        self.client = pymongo.MongoClient(os.environ.get('MONGODB_CONNECTION'))
+        self.items = self.client[os.environ.get("DATABASE_NAME")].items
 
     def get_items(self) -> List[dict]:
         """
