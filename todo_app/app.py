@@ -16,6 +16,7 @@ from todo_app.views.views import ViewModel
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(Config())
 
     mongo = MongoDB(
         Config().MONGODB_CONNECTION, 
