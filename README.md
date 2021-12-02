@@ -139,6 +139,8 @@ $ travis encrypt BOARD_ID="example" --add
 $ travis encrypt APP_KEY="example" --add
 $ travis encrypt DOCKER_HUB_PASSWORD="example" --add
 $ travis encrypt HEROKU_API_KEY="example" --add
+$ travis encrypt SECRET_KEY="example" --add
+$ travis encrypt MONGODB_CONNECTION="example" --add
 ```
 
 ## Heroku
