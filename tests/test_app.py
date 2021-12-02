@@ -4,7 +4,6 @@ import mongomock
 import pymongo
 
 from todo_app import app
-from todo_app.config import Config
 
 
 @pytest.fixture
@@ -74,6 +73,6 @@ def prepare_test_data():
         "status": "To Do", 
         "dateLastActivity": "2022-01-01T22:22:22.1111Z"
     }
-    mongo_client = pymongo.MongoClient(Config().MONGODB_CONNECTION)
+    mongo_client = pymongo.MongoClient(os.environ.get('MONGODB_CONNECTION'))
     items = mongo_client.todo_app_db.items
     items.insert_one(item)
