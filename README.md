@@ -136,13 +136,13 @@ To use Travis CLI you need to login with `travis login --com --github-token <per
 
 (First time only)
 ```bash
-$ travis encrypt TOKEN="example" --add
-$ travis encrypt BOARD_ID="example" --add
-$ travis encrypt APP_KEY="example" --add
-$ travis encrypt DOCKER_HUB_PASSWORD="example" --add
-$ travis encrypt HEROKU_API_KEY="example" --add
-$ travis encrypt SECRET_KEY="example" --add
-$ travis encrypt MONGODB_CONNECTION="example" --add
+$ travis encrypt --pro TOKEN="example" --add
+$ travis encrypt --pro BOARD_ID="example" --add
+$ travis encrypt --pro APP_KEY="example" --add
+$ travis encrypt --pro DOCKER_HUB_PASSWORD="example" --add
+$ travis encrypt --pro HEROKU_API_KEY="example" --add
+$ travis encrypt --pro SECRET_KEY="example" --add
+$ travis encrypt --pro MONGODB_CONNECTION="example" --add
 ```
 
 ## Heroku
