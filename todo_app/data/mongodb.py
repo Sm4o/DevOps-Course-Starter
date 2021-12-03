@@ -28,7 +28,7 @@ class CardStatus(Enum):
 
 class MongoDB:
     def __init__(self) -> None:
-        self.client = pymongo.MongoClient(os.environ.get('MONGODB_CONNECTION'))
+        self.client = pymongo.MongoClient(os.environ.get('DB_CONNECTION'))
         self.items = self.client[os.environ.get("DATABASE_NAME")].items
 
     def get_items(self) -> List[dict]:

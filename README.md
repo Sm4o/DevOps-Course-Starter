@@ -142,7 +142,7 @@ $ travis encrypt --pro APP_KEY="example" --add
 $ travis encrypt --pro DOCKER_HUB_PASSWORD="example" --add
 $ travis encrypt --pro HEROKU_API_KEY="example" --add
 $ travis encrypt --pro SECRET_KEY="example" --add
-$ travis encrypt --pro MONGODB_CONNECTION="example" --add
+$ travis encrypt --pro DB_CONNECTION="example" --add
 ```
 
 ## Heroku

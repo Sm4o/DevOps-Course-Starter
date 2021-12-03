@@ -11,7 +11,7 @@ class TrelloConfig:
 class Config:
     def __init__(self):
         self.SECRET_KEY = os.environ.get('SECRET_KEY')
-        self.MONGODB_CONNECTION = os.environ.get('MONGODB_CONNECTION')
+        self.DB_CONNECTION = os.environ.get('DB_CONNECTION')
         self.DATABASE_NAME = os.environ.get('DATABASE_NAME')
 
         if not self.SECRET_KEY:
