@@ -33,6 +33,7 @@ def app_with_temp_database():
 
     # Drop test database
     mongo_client = pymongo.MongoClient(os.environ.get("MONGODB_CONNECTION"))
+    print("HEEEEELP", os.environ.get("MONGODB_CONNECTION"))
     mongo_client.drop_database(os.environ['DATABASE_NAME'])
 
 
