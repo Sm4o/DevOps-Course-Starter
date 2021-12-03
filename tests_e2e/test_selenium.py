@@ -17,6 +17,7 @@ def app_with_temp_database():
     file_path = find_dotenv('.env')
     load_dotenv(file_path, override=True)
 
+    print('HEEElP', os.environ)
     os.environ['DATABASE_NAME'] += '_test'
 
     # Construct the new application
