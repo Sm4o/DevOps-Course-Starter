@@ -75,5 +75,5 @@ def prepare_test_data():
         "dateLastActivity": "2022-01-01T22:22:22.1111Z"
     }
     mongo_client = pymongo.MongoClient(os.environ.get('MONGODB_CONNECTION'))
-    items = mongo_client.todo_app_db.items
+    items = mongo_client[os.environ.get('DATABASE_NAME')].items
     items.insert_one(item)
