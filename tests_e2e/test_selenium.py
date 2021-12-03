@@ -14,10 +14,10 @@ from todo_app import app
 def app_with_temp_database():
     # Remove if it causes issues with Travis environment variables
     # Loading environment variables 
-    # file_path = find_dotenv('.env')
-    # load_dotenv(file_path, override=True)
+    file_path = find_dotenv('.env')
+    load_dotenv(file_path, override=True)
 
-    os.environ['DATABASE_NAME'] += '_test'
+    os.environ['DATABASE_NAME'] += 'todo_app_db_test'
 
     # Construct the new application
     application = app.create_app() 
