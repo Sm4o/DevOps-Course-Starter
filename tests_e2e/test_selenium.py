@@ -14,6 +14,7 @@ from todo_app import app
 def app_with_temp_database():
     # Remove if it causes issues with Travis environment variables
     # Loading environment variables 
+    print('HEEElP', os.environ)
     file_path = find_dotenv('.env')
     load_dotenv(file_path, override=True)
 
