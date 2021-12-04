@@ -71,12 +71,13 @@ def test_create_task(driver, app_with_temp_database):
 def test_complete_task(driver, app_with_temp_database):
     time.sleep(3)
 
-    done_button = driver.find_element_by_xpath("//a[contains(text(), 'Mark as Doing')]")
-    done_button.click()
-    driver.get('http://localhost:5000/')
+    doing_button = driver.find_element_by_xpath("//a[contains(text(), 'Mark as Doing')]")
+    doing_button.click()
+    time.sleep(6)
 
     done_button = driver.find_element_by_xpath("//a[contains(text(), 'Mark as Done')]")
-    driver.get('http://localhost:5000/')
+    done_button.click()
+    time.sleep(6)
 
     assert "Title E2E Test" in driver.page_source
     assert "Description E2E Test" in driver.page_source
@@ -87,7 +88,7 @@ def test_delete_task(driver, app_with_temp_database):
 
     delete_button = driver.find_element_by_xpath("//a[contains(text(), 'Delete')]")
     delete_button.click()
-    driver.get('http://localhost:5000/')
+    time.sleep(6)
 
     assert "Title E2E Test" not in driver.page_source
     assert "Description E2E Test" not in driver.page_source
