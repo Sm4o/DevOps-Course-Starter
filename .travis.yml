@@ -20,8 +20,8 @@ before_script:
 - echo "${DOCKER_HUB_PASSWORD}" | docker login --username sm4o --password-stdin
 - echo "${HEROKU_API_KEY}" | docker login --username _ --password-stdin registry.heroku.com
 script:
-- docker build --target test --tag todo_app:test .
-- docker run -e DATABASE_NAME -e DB_CONNECTION -e SECRET_KEY todo_app:test tests_e2e
+- docker build --target test --tag todo.app:test .
+- docker run -e DATABASE_NAME -e DB_CONNECTION -e MONGO_DB_CONNECTION -e SECRET_KEY todo.app:test tests_e2e
 - "./scripts/run_build.sh"
 deploy:
   provider: script
