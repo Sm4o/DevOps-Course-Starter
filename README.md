@@ -132,6 +132,16 @@ $ poetry run pytest test_single/test_foo.py
 Everytime a pull request is created or updated Travis CI will build the code and run all tests.
 To run the E2E tests it needs live Trello API credentials, which are stored as encrypted environment variables in `.travis.yml`
 
+(First time only)
 ```bash
 $ travis encrypt TOKEN="example" --add
+$ travis encrypt BOARD_ID="example" --add
+$ travis encrypt APP_KEY="example" --add
+$ travis encrypt DOCKER_HUB_PASSWORD="example" --add
+$ travis encrypt HEROKU_API_KEY="example" --add
 ```
+
+## Heroku
+
+Also everytime a pull request is created or updated Travis CI will deploy the main branch to production
+Live production instance is hosted on Heroku: https://todo-app-corndel.herokuapp.com/
