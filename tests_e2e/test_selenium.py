@@ -14,14 +14,9 @@ from todo_app import app
 def app_with_temp_database():
     # Remove if it causes issues with Travis environment variables
     # Loading environment variables 
-    print("MONGO_DB_CONNECTIONNNN", os.getenv("MONGO_DB_CONNECTION"))
-    print("DB_CONNECTIONNNNN", os.getenv("DB_CONNECTION"))
-    print("SECRET_KEYYYY", os.getenv("SECRET_KEY"))
-    print('HEEElP', os.environ)
-    # file_path = find_dotenv('.env')
-    # load_dotenv(file_path, override=True)
+    file_path = find_dotenv('.env')
+    load_dotenv(file_path, override=True)
 
-    print('HEEElP', os.environ)
     os.environ['DATABASE_NAME'] += '_test'
 
     # Construct the new application
@@ -38,8 +33,6 @@ def app_with_temp_database():
 
     # Drop test database
     mongo_client = pymongo.MongoClient(os.environ.get("DB_CONNECTION"))
-    print("HEEEEELP", os.environ.get("DB_CONNECTION"))
-    print("HEEEEELP", os.environ.get("DB_CONNECTION"), os.environ.get("SECRET_KEY"))
     mongo_client.drop_database(os.environ['DATABASE_NAME'])
 
 
@@ -95,8 +88,7 @@ def test_delete_task(driver, app_with_temp_database):
 
     delete_button = driver.find_element_by_xpath("//a[contains(text(), 'Delete')]")
     delete_button.click()
-
-    time.sleep(3)
+    driver.get('http://localhost:5000/')
 
     assert "Title E2E Test" not in driver.page_source
     assert "Description E2E Test" not in driver.page_source
