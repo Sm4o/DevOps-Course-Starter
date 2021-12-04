@@ -73,11 +73,10 @@ def test_complete_task(driver, app_with_temp_database):
 
     done_button = driver.find_element_by_xpath("//a[contains(text(), 'Mark as Doing')]")
     done_button.click()
-
-    time.sleep(3)
+    driver.get('http://localhost:5000/')
 
     done_button = driver.find_element_by_xpath("//a[contains(text(), 'Mark as Done')]")
-    done_button.click()
+    driver.get('http://localhost:5000/')
 
     assert "Title E2E Test" in driver.page_source
     assert "Description E2E Test" in driver.page_source

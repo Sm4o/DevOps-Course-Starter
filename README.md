@@ -145,6 +145,8 @@ $ travis encrypt --pro SECRET_KEY="example" --add
 $ travis encrypt --pro DB_CONNECTION="example" --add
 ```
 
+Make sure to properly escape bash commands.
+
 ## Heroku
 
 Also everytime a pull request is created or updated Travis CI will deploy the main branch to production
