@@ -88,7 +88,7 @@ def test_delete_task(driver, app_with_temp_database):
 
     delete_button = driver.find_element_by_xpath("//a[contains(text(), 'Delete')]")
     delete_button.click()
-    time.sleep(6)
+    time.sleep(1)
 
     assert "Title E2E Test" not in driver.page_source
     assert "Description E2E Test" not in driver.page_source
