@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from todo_app.views.views import ViewModel
-from todo_app.data.trello import CardStatus
+from todo_app.data.mongodb import CardStatus
 from todo_app.data.item import Item
 
 

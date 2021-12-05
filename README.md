@@ -1,24 +1,21 @@
 # DevOps Apprenticeship: Project Exercise
-Flask ToDo App with Trello backend and Vagrant for configuration management.
+[![Build Status](https://app.travis-ci.com/Sm4o/DevOps-Course-Starter.svg?branch=master)](https://app.travis-ci.com/Sm4o/DevOps-Course-Starter)
 
-## Trello Setup
-To store ToDo items, the project uses as Trello's REST API. To set it up:
+Flask ToDo App with MongoDB backend and Vagrant for configuration management.
 
-1. Create a [Trello account](https://trello.com/signup)
+## Environment variables 
 
-2. Generate an API Key and Token [here](https://trello.com/app-key)
+Save credentials to `.env` file as shown in `.env.template`:
+``` bash
+# Flask server configuration.
+FLASK_APP=todo_app/app
+FLASK_ENV=development
+SECRET_KEY=12345
 
-3. Save credentials to `.env` file as shown in `.env.template`:
-    ```
-    # Flask server configuration.
-    FLASK_APP=todo_app/app
-    FLASK_ENV=development
-
-    # Trello REST API credentials
-    APP_KEY=...
-    TOKEN=...
-    BOARD_ID=....
-    ```
+# Mongo DB
+DB_CONNECTION=mongodb://fakemongo.com
+DATABASE_NAME=fakedb
+```
 
 ## System Requirements
 
@@ -130,15 +127,12 @@ $ poetry run pytest test_single/test_foo.py
 
 # Travis testing
 Everytime a pull request is created or updated Travis CI will build the code and run all tests.
-To run the E2E tests it needs live Trello API credentials, which are stored as encrypted environment variables in `.travis.yml`
+To run the E2E tests it needs MongoDB and Docker registry credentials, which are stored as encrypted environment variables in `.travis.yml`
 
 To use Travis CLI you need to login with `travis login --com --github-token <personal-access-token>` which you can generate [here](https://github.com/settings/tokens)
 
 (First time only)
 ```bash
-$ travis encrypt --pro TOKEN="example" --add
-$ travis encrypt --pro BOARD_ID="example" --add
-$ travis encrypt --pro APP_KEY="example" --add
 $ travis encrypt --pro DOCKER_HUB_PASSWORD="example" --add
 $ travis encrypt --pro HEROKU_API_KEY="example" --add
 $ travis encrypt --pro SECRET_KEY="example" --add
@@ -153,3 +147,10 @@ Also everytime a pull request is created or updated Travis CI will deploy the ma
 Live production instance is hosted on Heroku: https://todo-app-corndel.herokuapp.com/
 
 Remember to setup some heroku environment variables too
+
+(First time only)
+``` bash
+heroku config:set `cat .env | grep SECRET_KEY`
+heroku config:set `cat .env | grep DB_CONNECTION`
+heroku config:set `cat .env | grep DATABASE_NAME`
+```

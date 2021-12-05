@@ -33,7 +33,7 @@ class MongoDB:
 
     def get_items(self) -> List[dict]:
         """
-        Fetches all saved items from Trello. 
+        Fetches all saved items. 
 
         Returns:
             list: The list of saved items.
@@ -52,7 +52,7 @@ class MongoDB:
 
     def add_item(self, name: str, description: str) -> None:
         """
-        Add a new item with the specified title to Trello.
+        Add a new item with the specified title
 
         Args:
             name: The name of the item.

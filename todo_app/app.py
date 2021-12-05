@@ -8,9 +8,8 @@ from flask import (
     url_for,
 )
 
-from todo_app.config import TrelloConfig, Config
-from todo_app.data.trello import Trello, CardStatus
-from todo_app.data.mongodb import MongoDB
+from todo_app.config import Config
+from todo_app.data.mongodb import MongoDB, CardStatus
 from todo_app.views.views import ViewModel
 
 
