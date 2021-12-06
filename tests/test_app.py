@@ -17,6 +17,7 @@ def client():
     with mongomock.patch(servers=(('fakemongo.com', 27017),)):
         prepare_test_data()
         test_app = app.create_app()
+        test_app.config['LOGIN_DISABLED'] = True
         with test_app.test_client() as client:
             yield client
 
