@@ -23,11 +23,14 @@ from todo_app.views.views import ViewModel
 
 
 class User(UserMixin):
-    def __init__(self, user_id):
-        self.id = user_id
+    def __init__(self, name):
+        self.id = name 
 
 
 login_manager = LoginManager()
+
+# Bad practice, but hardcoded for training purposes
+WRITER_LIST = ['Sm4o']
 
 
 @login_manager.unauthorized_handler
@@ -39,18 +42,17 @@ def unauthenticated():
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
+def load_user(name):
+    return User(name)
 
 
 def check_writer_role(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        writer_role_list = ['587395']
-        if current_user.id not in writer_role_list:
-            return login_manager.unauthorized()
-        else:
+        if current_user.id in WRITER_LIST:
             return func(*args, **kwargs)
+        else:
+            return login_manager.unauthorized()
     return decorated_view
 
 
@@ -70,7 +72,9 @@ def create_app():
         items_list = mongo.get_items()
         item_view_model = ViewModel(items_list)
         return render_template('index.html', 
-                               view_model=item_view_model)
+                               view_model=item_view_model,
+                               current_user=current_user,
+                               WRITER_LIST=WRITER_LIST)
 
     @app.route('/login/callback', methods=['GET'])
     def login_callback():
@@ -88,9 +92,8 @@ def create_app():
         url, headers, _ = client.add_token('https://api.github.com/user', headers=headers)
         github = requests.get(url, headers=headers)
         github_user = github.json()
-        user_id = github_user['id']
-        print(user_id)
-        user = User(user_id)
+        name = github_user['login']
+        user = User(name)
         login_user(user)
         return redirect(url_for('index'))
 
