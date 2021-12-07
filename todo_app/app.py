@@ -49,10 +49,14 @@ def load_user(name):
 def check_writer_role(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        if current_user.id in WRITER_LIST:
-            return func(*args, **kwargs)
+        if current_user.is_authenticated:
+            if current_user.id in WRITER_LIST:
+                return func(*args, **kwargs)
+            else:
+                return login_manager.unauthorized()
         else:
-            return login_manager.unauthorized()
+            # Only happens in tests or if no login_required decorator found
+            return func(*args, **kwargs)
     return decorated_view
 
 
@@ -113,8 +117,8 @@ def create_app():
         mongo.update_item(item_id, CardStatus.DONE)
         return redirect(url_for('index'))
 
-    @check_writer_role
     @app.route('/do/<item_id>')
+    @check_writer_role
     @login_required
     def do_item(item_id):
         mongo.update_item(item_id, CardStatus.DOING)

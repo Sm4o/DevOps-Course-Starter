@@ -15,7 +15,7 @@
         <input class="form-control form-control-lg" type="text" name="title" id="title" placeholder="What do you want to do?" required>
         <label for="description">Description</label>
         <input class="form-control form-control-lg" type="text" name="description" id="description" placeholder="Perhaps a more detailed description?">
-        {% if current_user.id in WRITER_LIST %} 
+        {% if current_user.id in WRITER_LIST or not current_user.is_authenticated %} 
           <button type="submit" class="btn btn-primary">Add</button>
         {% else %}
           <button type="submit" class="btn btn-primary" disabled>Add</button>
@@ -32,7 +32,7 @@
         <div class="row">
           <div class="col-sm">
             <b>{{ item.title }}</b> - {{ item.description }}
-            {% if current_user.id in WRITER_LIST %}
+            {% if current_user.id in WRITER_LIST or not current_user.is_authenticated %}
               <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
               <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
             {% else %}
@@ -50,7 +50,7 @@
         <div class="row">
           <div class="col-sm">
             <b>{{ item.title }}</b> - {{ item.description }}
-            {% if current_user.id in WRITER_LIST %}
+            {% if current_user.id in WRITER_LIST or not current_user.is_authenticated %}
               <a href="{{ url_for('do_item', item_id=item.id) }}" class="btn btn-primary btn-sm" role="button">Mark as Doing</a>
               <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
               <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
@@ -70,7 +70,7 @@
         <div class="row">
           <div class="col-sm">
             <del>{{ item.title }} - {{ item.description }}</del>
-            {% if current_user.id in WRITER_LIST %}
+            {% if current_user.id in WRITER_LIST or not current_user.is_authenticated %}
               <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
               <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
             {% else %}
@@ -87,7 +87,7 @@
             <div class="row">
               <div class="col-sm">
                 <del>{{ item.title }} - {{ item.description }}</del>
-                {% if current_user.id in WRITER_LIST %} 
+                {% if current_user.id in WRITER_LIST or not current_user.is_authenticated %} 
                   <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
                   <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
                 {% else %}
