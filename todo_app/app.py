@@ -1,4 +1,5 @@
 from os import access
+from functools import wraps
 import requests
 from flask import (
     Flask,
@@ -7,7 +8,13 @@ from flask import (
     redirect,
     url_for,
 )
-from flask_login import LoginManager, login_required, login_user, UserMixin
+from flask_login import (
+    LoginManager, 
+    login_required, 
+    login_user, 
+    UserMixin, 
+    current_user,
+)
 from oauthlib.oauth2 import WebApplicationClient
 
 from todo_app.config import Config
@@ -34,6 +41,17 @@ def unauthenticated():
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
+
+
+def check_writer_role(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        writer_role_list = ['587395']
+        if current_user.id not in writer_role_list:
+            return login_manager.unauthorized()
+        else:
+            return func(*args, **kwargs)
+    return decorated_view
 
 
 def create_app():
@@ -71,11 +89,13 @@ def create_app():
         github = requests.get(url, headers=headers)
         github_user = github.json()
         user_id = github_user['id']
+        print(user_id)
         user = User(user_id)
         login_user(user)
         return redirect(url_for('index'))
 
     @app.route('/add_item', methods=['POST'])
+    @check_writer_role
     @login_required
     def add_todo_item():
         item_title = request.form.get('title')
@@ -84,11 +104,13 @@ def create_app():
         return redirect(url_for('index'))
 
     @app.route('/complete/<item_id>')
+    @check_writer_role
     @login_required
     def complete_item(item_id):
         mongo.update_item(item_id, CardStatus.DONE)
         return redirect(url_for('index'))
 
+    @check_writer_role
     @app.route('/do/<item_id>')
     @login_required
     def do_item(item_id):
@@ -96,12 +118,14 @@ def create_app():
         return redirect(url_for('index'))
 
     @app.route('/uncomplete/<item_id>')
+    @check_writer_role
     @login_required
     def uncomplete_item(item_id):
         mongo.update_item(item_id, CardStatus.TODO)
         return redirect(url_for('index'))
 
     @app.route('/delete/<item_id>')
+    @check_writer_role
     @login_required
     def remove_item(item_id):
         mongo.delete_item(item_id)
