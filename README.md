@@ -99,7 +99,8 @@ docker run --env-file .env -p 5000:5000 todo.app:prod
 docker run --env-file .env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:dev
 ```
 ``` bash
-docker run --env-file .env --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test
+docker run --env-file .env.test --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test tests
+docker run --env-file .env --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test tests_e2e
 ```
 
 To launch the development app easier you can use docker-compose command:
