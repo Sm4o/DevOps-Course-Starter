@@ -49,14 +49,12 @@ def load_user(name):
 def check_writer_role(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        if current_user.is_authenticated:
-            if current_user.id in WRITER_LIST:
-                return func(*args, **kwargs)
-            else:
-                return login_manager.unauthorized()
-        else:
-            # Only happens in tests or if no login_required decorator found
+        if login_manager._login_disabled:
             return func(*args, **kwargs)
+        if current_user.id in WRITER_LIST:
+            return func(*args, **kwargs)
+        else:
+            return login_manager.unauthorized()
     return decorated_view
 
 
@@ -74,7 +72,10 @@ def create_app():
     @login_required
     def index():
         items_list = mongo.get_items()
-        item_view_model = ViewModel(items_list, current_user, WRITER_LIST)
+        item_view_model = ViewModel(items_list, 
+                                    current_user, 
+                                    WRITER_LIST, 
+                                    login_disabled=login_manager._login_disabled)
         return render_template('index.html', view_model=item_view_model)
 
     @app.route('/login/callback', methods=['GET'])

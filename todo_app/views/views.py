@@ -14,10 +14,12 @@ class ViewModel:
         items: List[Item], 
         current_user: Any, 
         writer_list: List[str],
+        login_disabled: bool=False,
     ):
         self._items = items
         self._current_user = current_user
         self._writer_list= writer_list
+        self.login_disabled = login_disabled
 
     @property
     def items(self):
@@ -57,8 +59,12 @@ class ViewModel:
     
     @property
     def can_see_write_controls(self):
-        if self._current_user.id in self._writer_list or not self._current_user.is_authenticated:
+        if self.login_disabled:
             return True
+        elif self._current_user.id in self._writer_list:
+            return True
+        else:
+            return False
 
     def _filter_items(self, status: Enum) -> List[Item]:
         return [item for item in self.items if item.status.value == status.value]
