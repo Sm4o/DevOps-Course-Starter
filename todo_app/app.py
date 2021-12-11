@@ -37,7 +37,7 @@ WRITER_LIST = ['Sm4o']
 def unauthenticated():
     client = WebApplicationClient(Config().GITHUB_CLIENT_ID)
     redirect_url = client.prepare_request_uri('https://github.com/login/oauth/authorize', 
-                                              redirect_uri='http://localhost:5000/login/callback')
+                                              redirect_url=f"{request.url_root}/login/callback")
     return redirect(redirect_url)
 
 
