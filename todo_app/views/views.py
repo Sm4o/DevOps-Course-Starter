@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from todo_app.data.trello import CardStatus
+from todo_app.data.mongodb import CardStatus
 from todo_app.data.item import Item
 
 # Annotations only
@@ -36,8 +36,7 @@ class ViewModel:
     def recent_done_items(self):
         recent_items = []
         for item in self.items_done:
-            item_date = datetime.strptime(item.last_modified_date, '%Y-%m-%dT%H:%M:%S.%fZ').date()
-            if item_date == datetime.today().date() or self.show_all_done_items:
+            if item.last_modified_date.date() == datetime.today().date() or self.show_all_done_items:
                 recent_items.append(item)
         return recent_items
 
@@ -45,8 +44,7 @@ class ViewModel:
     def older_done_items(self):
         older_items = []
         for item in self.items_done:
-            item_date = datetime.strptime(item.last_modified_date, '%Y-%m-%dT%H:%M:%S.%fZ').date() 
-            if item_date != datetime.today().date() and not self.show_all_done_items:
+            if item.last_modified_date.date() != datetime.today().date() and not self.show_all_done_items:
                 older_items.append(item)
         return older_items
 
