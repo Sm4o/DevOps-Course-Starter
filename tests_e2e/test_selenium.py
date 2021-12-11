@@ -10,7 +10,7 @@ import pymongo
 from todo_app import app
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='module', autouse=True)
 def app_with_temp_database():
     # Remove if it causes issues with Travis environment variables
     # Loading environment variables 
@@ -42,7 +42,7 @@ def driver():
         yield driver
 
 
-def test_task_journey(driver, app_with_temp_database):
+def test_task_journey(driver):
     # Waiting for application to be ready for use due to lag
     time.sleep(3)
 
@@ -51,7 +51,7 @@ def test_task_journey(driver, app_with_temp_database):
     assert driver.title == 'To-Do App' 
 
 
-def test_create_task(driver, app_with_temp_database):
+def test_create_task(driver):
     time.sleep(3)
 
     title_element = driver.find_element_by_id('title')
@@ -68,7 +68,7 @@ def test_create_task(driver, app_with_temp_database):
     assert "Description E2E Test" in driver.page_source
 
 
-def test_complete_task(driver, app_with_temp_database):
+def test_complete_task(driver):
     time.sleep(3)
 
     doing_button = driver.find_element_by_xpath("//a[contains(text(), 'Mark as Doing')]")
@@ -83,7 +83,7 @@ def test_complete_task(driver, app_with_temp_database):
     assert "Description E2E Test" in driver.page_source
 
 
-def test_delete_task(driver, app_with_temp_database):
+def test_delete_task(driver):
     time.sleep(3)
 
     delete_button = driver.find_element_by_xpath("//a[contains(text(), 'Delete')]")
