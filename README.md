@@ -15,6 +15,13 @@ SECRET_KEY=12345
 # Mongo DB
 DB_CONNECTION=mongodb://fakemongo.com
 DATABASE_NAME=fakedb
+
+# Authentication OAuth
+GITHUB_CLIENT_ID=abc1234
+GITHUB_CLIENT_SECRET=abc1234
+
+# Local only
+OAUTHLIB_INSECURE_TRANSPORT=1
 ```
 
 ## System Requirements
@@ -99,7 +106,8 @@ docker run --env-file .env -p 5000:5000 todo.app:prod
 docker run --env-file .env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:dev
 ```
 ``` bash
-docker run --env-file .env --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test
+docker run --env-file .env.test --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test tests
+docker run --env-file .env --mount type=bind,source="$(pwd)"/todo_app,target=/srv/todo_app todo.app:test tests_e2e
 ```
 
 To launch the development app easier you can use docker-compose command:
@@ -153,4 +161,15 @@ Remember to setup some heroku environment variables too
 heroku config:set `cat .env | grep SECRET_KEY`
 heroku config:set `cat .env | grep DB_CONNECTION`
 heroku config:set `cat .env | grep DATABASE_NAME`
+heroku config:set GITHUB_CLIENT_ID=abc1234  # Production app for heroku, not dev
+heroku config:set GITHUB_CLIENT_SECRET=abc1234  # Production app for heroku, not dev
 ```
+
+## OAuth App setup (First time only)
+
+We're using GitHub as OAuth provider. Follow the [documentation](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/) to create your OAuth app.
+
+* For the homepage URL field enter the address for accessing the website locally. 
+* For the callback add a particular path to this URL for example /login/ callback.
+
+> You will need both a `client-id` and `client-secret` for your .env file. The client-secret once generated will only be shown once, so take a note of it to avoid needing to regenerate one later.

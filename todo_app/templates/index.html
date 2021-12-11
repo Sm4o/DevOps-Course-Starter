@@ -9,15 +9,19 @@
 
   <div class="row">
     <div class="col-md-12"> 
-      <h2>New Item</h2>
-      <form action="{{ url_for('add_todo_item') }}" method="post">
-        <label for="title">Title</label>
-        <input class="form-control form-control-lg" type="text" name="title" id="title" placeholder="What do you want to do?" required>
-        <label for="description">Description</label>
-        <input class="form-control form-control-lg" type="text" name="description" id="description" placeholder="Perhaps a more detailed description?">
-        <button type="submit" class="btn btn-primary">Add</button>
-        <label for="title"><em>or press <code>Return</code> to save</em></label>
-      </form>
+      {% if view_model.can_see_write_controls %} 
+        <h2>New Item</h2>
+        <form action="{{ url_for('add_todo_item') }}" method="post">
+          <label for="title">Title</label>
+          <input class="form-control form-control-lg" type="text" name="title" id="title" placeholder="What do you want to do?" required>
+          <label for="description">Description</label>
+          <input class="form-control form-control-lg" type="text" name="description" id="description" placeholder="Perhaps a more detailed description?">
+          <button type="submit" class="btn btn-primary">Add</button>
+          <label for="title"><em>or press <code>Return</code> to save</em></label>
+        </form>
+      {% else %}
+        <p>Your account has no permissions to add/edit to-do items</p>
+      {% endif %}
 
       <h2>Items</h2>
       <h4>Doing</h4>
@@ -28,8 +32,10 @@
         <div class="row">
           <div class="col-sm">
             <b>{{ item.title }}</b> - {{ item.description }}
-            <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
-            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+            {% if view_model.can_see_write_controls %}
+              <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
+              <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
@@ -41,9 +47,11 @@
         <div class="row">
           <div class="col-sm">
             <b>{{ item.title }}</b> - {{ item.description }}
-            <a href="{{ url_for('do_item', item_id=item.id) }}" class="btn btn-primary btn-sm" role="button">Mark as Doing</a>
-            <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
-            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+            {% if view_model.can_see_write_controls %}
+              <a href="{{ url_for('do_item', item_id=item.id) }}" class="btn btn-primary btn-sm" role="button">Mark as Doing</a>
+              <a href="{{ url_for('complete_item', item_id=item.id) }}" class="btn btn-success btn-sm" role="button">Mark as Done</a>
+              <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
@@ -55,8 +63,10 @@
         <div class="row">
           <div class="col-sm">
             <del>{{ item.title }} - {{ item.description }}</del>
-            <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
-            <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+            {% if view_model.can_see_write_controls %}
+              <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
+              <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
@@ -67,8 +77,10 @@
             <div class="row">
               <div class="col-sm">
                 <del>{{ item.title }} - {{ item.description }}</del>
-                <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
-                <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+                {% if view_model.can_see_write_controls %} 
+                  <a href="{{ url_for('uncomplete_item', item_id=item.id) }}" class="btn btn-light btn-sm" role="button">Do again</a>
+                  <a href="{{ url_for('remove_item', item_id=item.id) }}" class="btn btn-danger btn-sm" role="button">Delete</a>
+                {% endif %}
               </div>
             </div>
           {% endfor %}

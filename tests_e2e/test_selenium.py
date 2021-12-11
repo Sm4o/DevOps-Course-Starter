@@ -21,6 +21,7 @@ def app_with_temp_database():
 
     # Construct the new application
     application = app.create_app() 
+    application.config['LOGIN_DISABLED'] = True
 
     # Start the app in its own thread.
     thread = Thread(target = lambda: application.run(use_reloader=False))
