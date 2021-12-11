@@ -43,12 +43,16 @@ def test_add_todo_item(client):
 def test_complete_item(client):
     response = client.get(f'/complete/61a7fab58503e36eb7595414', follow_redirects=True)
     response_text = response.get_data(as_text=True)
+    assert 'No items to do yet' in response_text
+    assert 'No items in progress' in response_text 
     assert 'No recent items completed yet' not in response_text 
 
 
 def test_do_item(client):
     response = client.get('/do/61a7fab58503e36eb7595414', follow_redirects=True)
     response_text = response.get_data(as_text=True)
+    assert 'No items to do yet' in response_text
+    assert 'No recent items completed yet' in response_text 
     assert 'No items in progress' not in response_text 
 
 
@@ -56,6 +60,9 @@ def test_uncomplete_item(client):
     response = client.get('/uncomplete/61a7fab58503e36eb7595414', follow_redirects=True)
     response_text = response.get_data(as_text=True)
     assert 'No items to do yet' not in response_text 
+    assert 'No recent items completed yet' in response_text 
+    assert 'No items in progress' in response_text 
+
 
 
 def test_remove_item(client):
