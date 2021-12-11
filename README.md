@@ -15,6 +15,13 @@ SECRET_KEY=12345
 # Mongo DB
 DB_CONNECTION=mongodb://fakemongo.com
 DATABASE_NAME=fakedb
+
+# Authentication OAuth
+GITHUB_CLIENT_ID=abc1234
+GITHUB_CLIENT_SECRET=abc1234
+
+# Local only
+OAUTHLIB_INSECURE_TRANSPORT=1
 ```
 
 ## System Requirements
@@ -155,3 +162,9 @@ heroku config:set `cat .env | grep SECRET_KEY`
 heroku config:set `cat .env | grep DB_CONNECTION`
 heroku config:set `cat .env | grep DATABASE_NAME`
 ```
+
+## OAuth App setup
+
+We're using GitHub as OAuth provider. For that create a new OAuth app:
+
+1. 
