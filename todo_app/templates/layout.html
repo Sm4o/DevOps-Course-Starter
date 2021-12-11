@@ -21,9 +21,9 @@
               </li>
           </ul>
           <ul class="navbar-nav">
-            {% if current_user.is_authenticated %}
+            {% if view_model._current_user.is_authenticated %}
               <span class="navbar-text">
-                Welcome {{ current_user.id }}
+                Welcome {{ view_model._current_user.id }}
               </span>
             {% else %}
               <li class="nav-item">

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 from datetime import datetime
 
 from todo_app.data.mongodb import CardStatus
@@ -9,8 +9,15 @@ from enum import Enum
 
 
 class ViewModel:
-    def __init__(self, items: List[Item]):
+    def __init__(
+        self, 
+        items: List[Item], 
+        current_user: Any, 
+        writer_list: List[str],
+    ):
         self._items = items
+        self._current_user = current_user
+        self._writer_list= writer_list
 
     @property
     def items(self):
@@ -47,6 +54,11 @@ class ViewModel:
             if item.last_modified_date.date() != datetime.today().date() and not self.show_all_done_items:
                 older_items.append(item)
         return older_items
+    
+    @property
+    def can_see_write_controls(self):
+        if self._current_user.id in self._writer_list or not self._current_user.is_authenticated:
+            return True
 
     def _filter_items(self, status: Enum) -> List[Item]:
         return [item for item in self.items if item.status.value == status.value]

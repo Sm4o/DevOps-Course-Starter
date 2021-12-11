@@ -74,11 +74,8 @@ def create_app():
     @login_required
     def index():
         items_list = mongo.get_items()
-        item_view_model = ViewModel(items_list)
-        return render_template('index.html', 
-                               view_model=item_view_model,
-                               current_user=current_user,
-                               WRITER_LIST=WRITER_LIST)
+        item_view_model = ViewModel(items_list, current_user, WRITER_LIST)
+        return render_template('index.html', view_model=item_view_model)
 
     @app.route('/login/callback', methods=['GET'])
     def login_callback():
