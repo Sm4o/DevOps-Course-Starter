@@ -163,8 +163,11 @@ heroku config:set `cat .env | grep DB_CONNECTION`
 heroku config:set `cat .env | grep DATABASE_NAME`
 ```
 
-## OAuth App setup
+## OAuth App setup (First time only)
 
-We're using GitHub as OAuth provider. For that create a new OAuth app:
+We're using GitHub as OAuth provider. Follow the [documentation](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/) to create your OAuth app.
 
-1. 
+* For the homepage URL field enter the address for accessing the website locally. 
+* For the callback add a particular path to this URL for example /login/ callback.
+
+> You will need both a `client-id` and `client-secret` for your .env file. The client-secret once generated will only be shown once, so take a note of it to avoid needing to regenerate one later.
