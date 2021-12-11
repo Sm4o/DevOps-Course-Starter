@@ -161,6 +161,8 @@ Remember to setup some heroku environment variables too
 heroku config:set `cat .env | grep SECRET_KEY`
 heroku config:set `cat .env | grep DB_CONNECTION`
 heroku config:set `cat .env | grep DATABASE_NAME`
+heroku config:set GITHUB_CLIENT_ID=abc1234  # Production app for heroku, not dev
+heroku config:set GITHUB_CLIENT_SECRET=abc1234  # Production app for heroku, not dev
 ```
 
 ## OAuth App setup (First time only)
