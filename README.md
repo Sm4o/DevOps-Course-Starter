@@ -155,6 +155,30 @@ Make sure to properly escape bash commands.
 Everytime a pull request is merged Travis CI will deploy the main branch to production
 Live production instance is hosted on Azure: http://corndel-todo-app-sam.azurewebsites.net/
 
+First time only setup instructions to create Azure resources.
+Define service names:
+* `export APP_NAME=corndel-todo-app-sam`
+* `export APP_PLAN_NAME=corndel-todo-app`
+* `export RG=OpenCohort1_SamuilPetrov_ProjectExercise`
+
+Create a NoSQL DB similar to MongoDB:
+* `az cosmosdb create --name $APP_NAME --resource-group $RG --kind MongoDB --capabilities EnableServerless --server-version 3.6`
+* `az cosmosdb mongodb database create --account-name $APP_NAME --name todo-app --resource-group $RG`
+
+Get the connection string: `az cosmosdb keys list -n $APP_NAME -g $RG --type connection-strings`
+
+Creating an Azure App:
+* `az appservice plan create --resource-group $RG -n corndel-todo-app --sku B1 --is-linux`
+* `az webapp create --resource-group $RG --plan $APP_PLAN_NAME --name $APP_NAME --deployment-container-image-name sm4o/todo.app:latest`
+
+Environment variables:
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings FLASK_APP=todo_app/app`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings FLASK_ENV=production`  
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings SECRET_KEY=1234abc`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings DATABASE_NAME=db_name`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings GITHUB_CLIENT_ID=1234abc`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings GITHUB_CLIENT_SECRET=1234abc`
+
 
 ## OAuth App setup (First time only)
 
