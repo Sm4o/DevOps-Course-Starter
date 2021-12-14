@@ -1,7 +1,7 @@
 # DevOps Apprenticeship: Project Exercise
 [![Build Status](https://app.travis-ci.com/Sm4o/DevOps-Course-Starter.svg?branch=master)](https://app.travis-ci.com/Sm4o/DevOps-Course-Starter)
 
-Flask ToDo App with MongoDB backend and Vagrant for configuration management.
+Flask ToDo App with MongoDB backend and Vagrant for configuration management. http://corndel-todo-app-sam.azurewebsites.net/
 
 ## Environment variables 
 
@@ -145,25 +145,16 @@ $ travis encrypt --pro DOCKER_HUB_PASSWORD="example" --add
 $ travis encrypt --pro HEROKU_API_KEY="example" --add
 $ travis encrypt --pro SECRET_KEY="example" --add
 $ travis encrypt --pro DB_CONNECTION="example" --add
+$ travis encrypt --pro WEBHOOK_URL="example" --add
 ```
 
 Make sure to properly escape bash commands.
 
-## Heroku
+## Azure App Deployment
 
-Also everytime a pull request is created or updated Travis CI will deploy the main branch to production
-Live production instance is hosted on Heroku: https://todo-app-corndel.herokuapp.com/
+Everytime a pull request is merged Travis CI will deploy the main branch to production
+Live production instance is hosted on Azure: http://corndel-todo-app-sam.azurewebsites.net/
 
-Remember to setup some heroku environment variables too
-
-(First time only)
-``` bash
-heroku config:set `cat .env | grep SECRET_KEY`
-heroku config:set `cat .env | grep DB_CONNECTION`
-heroku config:set `cat .env | grep DATABASE_NAME`
-heroku config:set GITHUB_CLIENT_ID=abc1234  # Production app for heroku, not dev
-heroku config:set GITHUB_CLIENT_SECRET=abc1234  # Production app for heroku, not dev
-```
 
 ## OAuth App setup (First time only)
 
