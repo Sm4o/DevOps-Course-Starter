@@ -150,7 +150,7 @@ $ travis encrypt --pro WEBHOOK_URL="example" --add
 
 Make sure to properly escape bash commands.
 
-## Azure App Deployment
+# Azure App Deployment
 
 Everytime a pull request is merged Travis CI will deploy the main branch to production
 Live production instance is hosted on Azure: http://corndel-todo-app-sam.azurewebsites.net/
@@ -180,7 +180,7 @@ Environment variables:
 * `az webapp config appsettings set -g $RG -n $APP_NAME --settings GITHUB_CLIENT_SECRET=1234abc`
 
 
-## OAuth App setup (First time only)
+# OAuth App setup (First time only)
 
 We're using GitHub as OAuth provider. Follow the [documentation](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/) to create your OAuth app.
 
@@ -188,3 +188,14 @@ We're using GitHub as OAuth provider. Follow the [documentation](https://develop
 * For the callback add a particular path to this URL for example /login/ callback.
 
 > You will need both a `client-id` and `client-secret` for your .env file. The client-secret once generated will only be shown once, so take a note of it to avoid needing to regenerate one later.
+
+# Terraform
+Initialise the directory, set up the backedn and link to [azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs):
+
+``` bash
+terraform init
+```
+
+Running `terraform plan` will show what actions would be performed, before running `terraform apply` to actually implement them. You can also run `terraform destroy` to remove all resources you've created.
+
+To check the current state run `terraform show` and `terraform state list`.
