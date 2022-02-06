@@ -1,7 +1,7 @@
 # DevOps Apprenticeship: Project Exercise
 [![Build Status](https://app.travis-ci.com/Sm4o/DevOps-Course-Starter.svg?branch=master)](https://app.travis-ci.com/Sm4o/DevOps-Course-Starter)
 
-Flask ToDo App with MongoDB backend and Vagrant for configuration management.
+Flask ToDo App with MongoDB backend and Vagrant for configuration management. http://corndel-todo-app-sam.azurewebsites.net/
 
 ## Environment variables 
 
@@ -145,25 +145,40 @@ $ travis encrypt --pro DOCKER_HUB_PASSWORD="example" --add
 $ travis encrypt --pro HEROKU_API_KEY="example" --add
 $ travis encrypt --pro SECRET_KEY="example" --add
 $ travis encrypt --pro DB_CONNECTION="example" --add
+$ travis encrypt --pro WEBHOOK_URL="example" --add
 ```
 
 Make sure to properly escape bash commands.
 
-## Heroku
+## Azure App Deployment
 
-Also everytime a pull request is created or updated Travis CI will deploy the main branch to production
-Live production instance is hosted on Heroku: https://todo-app-corndel.herokuapp.com/
+Everytime a pull request is merged Travis CI will deploy the main branch to production
+Live production instance is hosted on Azure: http://corndel-todo-app-sam.azurewebsites.net/
 
-Remember to setup some heroku environment variables too
+First time only setup instructions to create Azure resources.
+Define service names:
+* `export APP_NAME=corndel-todo-app-sam`
+* `export APP_PLAN_NAME=corndel-todo-app`
+* `export RG=OpenCohort1_SamuilPetrov_ProjectExercise`
 
-(First time only)
-``` bash
-heroku config:set `cat .env | grep SECRET_KEY`
-heroku config:set `cat .env | grep DB_CONNECTION`
-heroku config:set `cat .env | grep DATABASE_NAME`
-heroku config:set GITHUB_CLIENT_ID=abc1234  # Production app for heroku, not dev
-heroku config:set GITHUB_CLIENT_SECRET=abc1234  # Production app for heroku, not dev
-```
+Create a NoSQL DB similar to MongoDB:
+* `az cosmosdb create --name $APP_NAME --resource-group $RG --kind MongoDB --capabilities EnableServerless --server-version 3.6`
+* `az cosmosdb mongodb database create --account-name $APP_NAME --name todo-app --resource-group $RG`
+
+Get the connection string: `az cosmosdb keys list -n $APP_NAME -g $RG --type connection-strings`
+
+Creating an Azure App:
+* `az appservice plan create --resource-group $RG -n corndel-todo-app --sku B1 --is-linux`
+* `az webapp create --resource-group $RG --plan $APP_PLAN_NAME --name $APP_NAME --deployment-container-image-name sm4o/todo.app:latest`
+
+Environment variables:
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings FLASK_APP=todo_app/app`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings FLASK_ENV=production`  
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings SECRET_KEY=1234abc`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings DATABASE_NAME=db_name`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings GITHUB_CLIENT_ID=1234abc`
+* `az webapp config appsettings set -g $RG -n $APP_NAME --settings GITHUB_CLIENT_SECRET=1234abc`
+
 
 ## OAuth App setup (First time only)
 
