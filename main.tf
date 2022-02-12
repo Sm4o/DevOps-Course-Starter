@@ -5,6 +5,13 @@ terraform {
       version = ">= 2.49"
     }
   }
+
+  backend "azurerm" {
+    resource_group_name  = "OpenCohort1_SamuilPetrov_ProjectExercise"
+    storage_account_name = "${var.prefix}-terraformed-storage"
+    container_name       = "terraform-state"
+    key                  = "prod.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
@@ -17,7 +24,7 @@ data "azurerm_resource_group" "main" {
 
 
 resource "azurerm_app_service_plan" "main" {
-  name                = "terraformed-asp"
+  name                = "${var.prefix}-terraformed-asp"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   kind                = "Linux"
@@ -30,7 +37,7 @@ resource "azurerm_app_service_plan" "main" {
 }
 
 resource "azurerm_app_service" "main" {
-  name                = "terraformed-todo-app-sam"
+  name                = "${var.prefix}-terraformed-todo-app-sam"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.main.id
@@ -43,6 +50,12 @@ resource "azurerm_app_service" "main" {
   app_settings = {
     "DOCKER_REGISTRY_SERVER_URL" = "https://index.docker.io"
     "DB_CONNECTION"              = "mongodb://${azurerm_cosmosdb_account.main.name}:${azurerm_cosmosdb_account.main.primary_key}@${azurerm_cosmosdb_account.main.name}.mongo.cosmos.azure.com:10255/DefaultDatabase?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000"
+    "DATABASE_NAME"              = "${var.DATABASE_NAME}"
+    "FLASK_APP"                  = "todo_app/app"
+    "FLASK_ENV"                  = "production"
+    "SECRET_KEY"                 = "${var.SECRET_KEY}"
+    "GITHUB_CLIENT_ID"           = "${var.GITHUB_CLIENT_ID}"
+    "GITHUB_CLIENT_SECRET"       = "${var.GITHUB_CLIENT_SECRET}"
   }
 }
 
@@ -78,7 +91,10 @@ resource "azurerm_cosmosdb_account" "main" {
 }
 
 resource "azurerm_cosmosdb_mongo_database" "main" {
-  name                = "terraformed-todo-app-sam-db"
+  name                = var.DATABASE_NAME
   account_name        = azurerm_cosmosdb_account.main.name
   resource_group_name = data.azurerm_resource_group.main.name
+  lifecycle {
+    prevent_destroy = true
+  }
 }
