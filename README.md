@@ -142,10 +142,12 @@ To use Travis CLI you need to login with `travis login --com --github-token <per
 (First time only)
 ```bash
 $ travis encrypt --pro DOCKER_HUB_PASSWORD="example" --add
-$ travis encrypt --pro HEROKU_API_KEY="example" --add
 $ travis encrypt --pro SECRET_KEY="example" --add
 $ travis encrypt --pro DB_CONNECTION="example" --add
-$ travis encrypt --pro WEBHOOK_URL="example" --add
+$ travis encrypt --pro ARM_CLIENT_ID="example" --add
+$ travis encrypt --pro ARM_TENANT_ID="example" --add
+$ travis encrypt --pro ARM_SUBSCRIPTION_ID="example" --add
+$ travis encrypt --pro ARM_CLIENT_SECRET="example" --add
 ```
 
 Make sure to properly escape bash commands.

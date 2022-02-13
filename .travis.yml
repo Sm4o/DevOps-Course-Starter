@@ -24,7 +24,6 @@ notifications:
     on_failure: always
 before_script:
 - echo "${DOCKER_HUB_PASSWORD}" | docker login --username sm4o --password-stdin
-- echo "${HEROKU_API_KEY}" | docker login --username _ --password-stdin registry.heroku.com
 script:
 - docker build --target test --tag todo.app:test .
 - docker run --env-file .env.test todo.app:test tests
