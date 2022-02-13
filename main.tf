@@ -8,8 +8,8 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "OpenCohort1_SamuilPetrov_ProjectExercise"
-    storage_account_name = "${var.prefix}-terraformed-storage"
-    container_name       = "terraform-state"
+    storage_account_name = "tfstate14862"
+    container_name       = "tfstate"
     key                  = "prod.terraform.tfstate"
   }
 }

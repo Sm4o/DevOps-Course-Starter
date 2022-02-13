@@ -199,3 +199,25 @@ terraform init
 Running `terraform plan` will show what actions would be performed, before running `terraform apply` to actually implement them. You can also run `terraform destroy` to remove all resources you've created.
 
 To check the current state run `terraform show` and `terraform state list`.
+
+State is stored in an Azure Blob Storage backend. First time only, to create it:
+
+``` bash
+#!/bin/bash
+
+RESOURCE_GROUP_NAME=tfstate
+STORAGE_ACCOUNT_NAME=tfstate$RANDOM
+CONTAINER_NAME=tfstate
+
+# Create storage account
+$ az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob
+
+# Create blob container
+$ az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
+```
+
+So that Travis can access and alter Azure resources, setup a Service Principal Authentication:
+
+``` bash
+az ad sp create-for-rbac --name "<SERVICE PRINCIPAL NAME>" --role Contributor --scopes /subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>
+```
