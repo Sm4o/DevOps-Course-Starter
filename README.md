@@ -192,7 +192,7 @@ We're using GitHub as OAuth provider. Follow the [documentation](https://develop
 > You will need both a `client-id` and `client-secret` for your .env file. The client-secret once generated will only be shown once, so take a note of it to avoid needing to regenerate one later.
 
 # Terraform
-Initialise the directory, set up the backedn and link to [azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs):
+Initialise the directory, set up the backend and link to [azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs):
 
 ``` bash
 terraform init
