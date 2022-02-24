@@ -82,14 +82,3 @@ def test_complete_task(driver):
 
     assert "Title E2E Test" in driver.page_source
     assert "Description E2E Test" in driver.page_source
-
-
-def test_delete_task(driver):
-    time.sleep(3)
-
-    delete_button = driver.find_element_by_xpath("//a[contains(text(), 'Delete')]")
-    delete_button.click()
-    time.sleep(10)
-
-    assert "Title E2E Test" not in driver.page_source
-    assert "Description E2E Test" not in driver.page_source
