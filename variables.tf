@@ -8,20 +8,21 @@ variable "location" {
 }
 
 variable "GITHUB_CLIENT_ID" {
-  type = string
+  type    = string
+  default = "627a47faec12864e9953"
 }
 
 variable "GITHUB_CLIENT_SECRET" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "SECRET_KEY" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "DATABASE_NAME" {
-  type = string
+  type    = string
   default = "terraformed-todo-app-sam-db"
 }
