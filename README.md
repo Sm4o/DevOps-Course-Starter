@@ -148,6 +148,7 @@ $ travis encrypt --pro ARM_CLIENT_ID="example" --add
 $ travis encrypt --pro ARM_TENANT_ID="example" --add
 $ travis encrypt --pro ARM_SUBSCRIPTION_ID="example" --add
 $ travis encrypt --pro ARM_CLIENT_SECRET="example" --add
+$ travis encrypt --pro GITHUB_CLIENT_SECRET="example" --add
 ```
 
 Make sure to properly escape bash commands.
@@ -222,4 +223,10 @@ So that Travis can access and alter Azure resources, setup a Service Principal A
 
 ``` bash
 az ad sp create-for-rbac --name "<SERVICE PRINCIPAL NAME>" --role Contributor --scopes /subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP NAME>
+```
+
+If a build fails there's a chance the terraform state gets locked and the next build will fail due to locked state. To force unlock run:
+
+``` bash
+$ terraform force-unlock -force <StateID>
 ```
