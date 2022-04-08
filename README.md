@@ -148,6 +148,7 @@ $ travis encrypt --pro ARM_CLIENT_ID="example" --add
 $ travis encrypt --pro ARM_TENANT_ID="example" --add
 $ travis encrypt --pro ARM_SUBSCRIPTION_ID="example" --add
 $ travis encrypt --pro ARM_CLIENT_SECRET="example" --add
+$ travis encrypt --pro GITHUB_CLIENT_SECRET="example" --add
 ```
 
 Make sure to properly escape bash commands.
