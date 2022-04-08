@@ -44,4 +44,4 @@ deploy:
   script: bash ./scripts/webhook.sh
   skip_cleanup: true
   on:
-    branch: module_12_fix 
+    branch: master 
