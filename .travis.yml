@@ -42,5 +42,6 @@ before_deploy:
 deploy:
   provider: script
   script: bash ./scripts/webhook.sh
+  skip_cleanup: true
   on:
     branch: module_12_fix 
