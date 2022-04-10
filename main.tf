@@ -56,6 +56,8 @@ resource "azurerm_app_service" "main" {
     "SECRET_KEY"                 = "${var.SECRET_KEY}"
     "GITHUB_CLIENT_ID"           = "${var.GITHUB_CLIENT_ID}"
     "GITHUB_CLIENT_SECRET"       = "${var.GITHUB_CLIENT_SECRET}"
+    "LOG_LEVEL"                  = "${var.LOG_LEVEL}"
+    "LOGGLY_TOKEN"               = "${var.LOGGLY_TOKEN}"
   }
 }
 

@@ -1,5 +1,6 @@
-from os import access
 from functools import wraps
+from logging import getLogger, Formatter
+
 import requests
 from flask import (
     Flask,
@@ -16,6 +17,8 @@ from flask_login import (
     current_user,
 )
 from oauthlib.oauth2 import WebApplicationClient
+from loggly.handlers import HTTPSHandler
+from pythonjsonlogger import jsonlogger
 
 from todo_app.config import Config
 from todo_app.data.mongodb import MongoDB, CardStatus
@@ -46,27 +49,38 @@ def load_user(name):
     return User(name)
 
 
-def check_writer_role(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        if login_manager._login_disabled:
-            return func(*args, **kwargs)
-        if current_user.id in WRITER_LIST:
-            return func(*args, **kwargs)
-        else:
-            return login_manager.unauthorized()
-    return decorated_view
-
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config())
+
+    app.logger.setLevel(app.config['LOG_LEVEL'])
+    if app.config['LOGGLY_TOKEN'] is not None:
+        handler = HTTPSHandler(f'https://logs-01.loggly.com/inputs/{app.config["LOGGLY_TOKEN"]}/tag/todo-app')
+        # Making sure werkzeug request logs are also sent to Loggly
+        getLogger('werkzeug').addHandler(HTTPSHandler(f'https://logs-01.loggly.com/inputs/{app.config["LOGGLY_TOKEN"]}/tag/todo-app-requests'))
+        formatter = jsonlogger.JsonFormatter()
+        handler.setFormatter(formatter)
+        app.logger.addHandler(handler)
 
     login_manager.init_app(app)
 
     mongo = MongoDB()
 
     client = WebApplicationClient(Config().GITHUB_CLIENT_ID)
+
+    def check_writer_role(func):
+        @wraps(func)
+        def decorated_view(*args, **kwargs):
+            if login_manager._login_disabled:
+                app.logger.warn("Application is running with login_manager._login_disabled = true")
+                return func(*args, **kwargs)
+            if current_user.id in WRITER_LIST:
+                app.logger.info("User %s is authorized" % current_user.id)
+                return func(*args, **kwargs)
+            else:
+                app.logger.error("User %s is unauthorized" % current_user.id)
+                return login_manager.unauthorized()
+        return decorated_view
 
     @app.route('/')
     @login_required
@@ -97,43 +111,64 @@ def create_app():
         name = github_user['login']
         user = User(name)
         login_user(user)
+        app.logger.info("User %s logged in" % name)
         return redirect(url_for('index'))
 
     @app.route('/add_item', methods=['POST'])
     @check_writer_role
     @login_required
     def add_todo_item():
-        item_title = request.form.get('title')
-        item_description = request.form.get('description')
-        mongo.add_item(item_title, item_description)
+        try:
+            item_title = request.form.get('title')
+            item_description = request.form.get('description')
+            mongo.add_item(item_title, item_description)
+            app.logger.info("Added todo item %s" % request.form)
+        except Exception as err:
+            app.logger.error(err, exc_info=True)
         return redirect(url_for('index'))
 
     @app.route('/complete/<item_id>')
     @check_writer_role
     @login_required
     def complete_item(item_id):
-        mongo.update_item(item_id, CardStatus.DONE)
+        try:
+            mongo.update_item(item_id, CardStatus.DONE)
+            app.logger.info("Completed item %s" % item_id)
+        except Exception as err:
+            app.logger.error(err, exc_info=True)
         return redirect(url_for('index'))
 
     @app.route('/do/<item_id>')
     @check_writer_role
     @login_required
     def do_item(item_id):
-        mongo.update_item(item_id, CardStatus.DOING)
+        try:
+            mongo.update_item(item_id, CardStatus.DOING)
+            app.logger.info("Update item %s status to DOING" % item_id)
+        except Exception as err:
+            app.logger.error(err, exc_info=True)
         return redirect(url_for('index'))
 
     @app.route('/uncomplete/<item_id>')
     @check_writer_role
     @login_required
     def uncomplete_item(item_id):
-        mongo.update_item(item_id, CardStatus.TODO)
+        try:
+            mongo.update_item(item_id, CardStatus.TODO)
+            app.logger.info("Update item %s status to TODO" % item_id)
+        except Exception as err:
+            app.logger.error(err, exc_info=True)
         return redirect(url_for('index'))
 
     @app.route('/delete/<item_id>')
     @check_writer_role
     @login_required
     def remove_item(item_id):
-        mongo.delete_item(item_id)
+        try:
+            mongo.delete_item(item_id)
+            app.logger.info("Deleted item %s" % item_id)
+        except Exception as err:
+            app.logger.error(err, exc_info=True)
         return redirect(url_for('index'))
     return app
 
