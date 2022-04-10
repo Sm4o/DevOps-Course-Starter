@@ -26,3 +26,13 @@ variable "DATABASE_NAME" {
   type    = string
   default = "terraformed-todo-app-sam-db"
 }
+
+variable "LOG_LEVEL" {
+  type    = string
+  default = "ERROR"
+}
+
+variable "LOGGLY_TOKEN" {
+  type      = string
+  sensitive = true
+}
