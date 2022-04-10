@@ -72,7 +72,7 @@ def create_app():
         @wraps(func)
         def decorated_view(*args, **kwargs):
             if login_manager._login_disabled:
-                app.logger.warn("Application is running with login_manager._login_disabled = true")
+                app.logger.warning("Application is running with login_manager._login_disabled = true")
                 return func(*args, **kwargs)
             if current_user.id in WRITER_LIST:
                 app.logger.info("User %s is authorized" % current_user.id)
