@@ -149,6 +149,7 @@ $ travis encrypt --pro ARM_TENANT_ID="example" --add
 $ travis encrypt --pro ARM_SUBSCRIPTION_ID="example" --add
 $ travis encrypt --pro ARM_CLIENT_SECRET="example" --add
 $ travis encrypt --pro GITHUB_CLIENT_SECRET="example" --add
+$ travis encrypt --pro LOGGLY_TOKEN="example" --add
 ```
 
 Make sure to properly escape bash commands.
@@ -229,4 +230,35 @@ If a build fails there's a chance the terraform state gets locked and the next b
 
 ``` bash
 $ terraform force-unlock -force <StateID>
+```
+
+# Minikube
+
+Minikube is a version of Kubernetes that you can run locally on a development machine. It can be a great way to learn about Kubernetes and test changes locally without having to set up and pay for hosting.
+
+Download:
+
+- Docker
+- Kubectl
+- minikube
+
+Starting the app on Minikube:
+
+- `minikube start`: run this in an admin terminal to spin up the minikube cluster.
+- `docker build --target production --tag todo.app:prod .`: create a Docker image for the Pod.
+- `minikube image load todo.app:prod`: load in the docker image.
+- `kubectl apply -f deployment.yml`: deploy a Pod running the docker image.
+- `kubectl apply -f service.yml`: deploy the Service.
+- `kubectl port-forward service/module-14 5000:5000`: link up our minikube Service with a port on localhost.
+
+Opens in http://localhost:5000/ 
+
+The app will fail without setting these secrets:
+``` bash
+$ kubectl create secret generic test-secret \
+    --from-literal='GITHUB_CLIENT_ID=<GITHUB_CLIENT_ID>' \
+    --from-literal='GITHUB_CLIENT_SECRET=<GITHUB_CLIENT_SECRET>' \
+    --from-literal='DB_CONNECTION=<DB_CONNECTION>' \
+    --from-literal='SECRET_KEY=<SECRET_KEY>' \
+    --from-literal='LOGGLY_TOKEN=<LOGGLY_TOKEN>'
 ```

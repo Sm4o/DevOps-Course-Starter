@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: module-14
+spec:
+  selector:
+    matchLabels:
+      app: module-14
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: module-14
+    spec:
+      containers:
+        - name: todo-app
+          image: todo.app:prod
+          ports:
+          - containerPort: 5000
+          imagePullPolicy: Never
+          env:
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: todoapp-secret
+                key: SECRET_KEY
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: LOGGLY_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: todoapp-secret
+                key: LOGGLY_TOKEN
+          - name: FLASK_APP
+            value: "todo_app/app"
+          - name: FLASK_ENV
+            value: "development"
+          - name: DATABASE_NAME
+            value: "todo_app"
+          - name: DB_CONNECTION
+            valueFrom:
+              secretKeyRef:
+                name: todoapp-secret
+                key: DB_CONNECTION
+          - name: GITHUB_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: todoapp-secret
+                key: GITHUB_CLIENT_ID
+          - name: GITHUB_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: todoapp-secret
+                key: GITHUB_CLIENT_SECRET
